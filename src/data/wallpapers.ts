@@ -1,4 +1,4 @@
-import bliss from "../assets/wallpaper.jpg";
+import bliss from "../assets/wallpaper.webp";
 import type { Wallpaper } from "../store/desktop";
 
 export const WALLPAPER_IMAGES: Record<string, { label: string; url: string }> = {
