@@ -8,6 +8,7 @@ import Desktop from "./components/Desktop";
 import LeaveDialog from "./components/LeaveDialog";
 import Login from "./components/Login";
 import RunDialog from "./components/RunDialog";
+import Screensaver from "./components/Screensaver";
 import ShutdownDialog from "./components/ShutdownDialog";
 import ShutdownScreen from "./components/ShutdownScreen";
 import Taskbar from "./components/Taskbar";
@@ -78,6 +79,7 @@ function App() {
           <WelcomeBalloon />
           <ContextMenu />
           <LeaveDialog />
+          <Screensaver />
           {dialog === "run" && <RunDialog />}
           {dialog === "shutdown" && <ShutdownDialog close={() => openDialog(null)} />}
         </>

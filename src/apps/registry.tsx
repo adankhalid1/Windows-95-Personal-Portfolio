@@ -1,5 +1,7 @@
 import type { ComponentType, ReactElement } from "react";
 import {
+  Calculator as CalculatorIcon,
+  Cdplayer107,
   Computer,
   Computer3,
   Desk100,
@@ -9,8 +11,11 @@ import {
   Freecell1,
   Joy102,
   Mail,
+  MsDos,
   Mshearts1,
+  Mspaint,
   Notepad,
+  Notepad2,
   RecycleFull,
   Sol1,
   Winmine1,
@@ -23,6 +28,11 @@ import Hearts from "./cards/Hearts";
 import Blocks from "./arcade/Blocks";
 import Pong from "./arcade/Pong";
 import Snake from "./arcade/Snake";
+import Calculator from "./tools/Calculator";
+import CommandPrompt from "./tools/CommandPrompt";
+import MusicPlayer from "./tools/MusicPlayer";
+import NotepadApp from "./tools/NotepadApp";
+import Paint from "./tools/Paint";
 import Checkers from "./brain/Checkers";
 import ConnectFour from "./brain/ConnectFour";
 import Game2048 from "./brain/Game2048";
@@ -259,6 +269,61 @@ export const APPS: AppDef[] = [
     component: Sudoku,
     fixedSize: true,
     folder: "games",
+  },
+  {
+    id: "calculator",
+    title: "Calculator",
+    label: "Calculator",
+    icon: <CalculatorIcon variant="32x32_4" />,
+    smallIcon: <CalculatorIcon variant="16x16_4" />,
+    width: 0,
+    component: Calculator,
+    fixedSize: true,
+    folder: "accessories",
+  },
+  {
+    id: "notepad",
+    title: "Notepad",
+    label: "Notepad",
+    icon: <Notepad2 variant="32x32_4" />,
+    smallIcon: <Notepad2 variant="16x16_4" />,
+    width: 460,
+    height: 300,
+    component: NotepadApp,
+    folder: "accessories",
+  },
+  {
+    id: "paint",
+    title: "untitled - Paint",
+    label: "Paint",
+    icon: <Mspaint variant="32x32_4" />,
+    smallIcon: <Mspaint variant="16x16_4" />,
+    width: 0,
+    component: Paint,
+    fixedSize: true,
+    folder: "accessories",
+  },
+  {
+    id: "command",
+    title: "MS-DOS Prompt",
+    label: "Command Prompt",
+    icon: <MsDos variant="32x32_32" />,
+    smallIcon: <MsDos variant="16x16_32" />,
+    width: 560,
+    height: 340,
+    component: CommandPrompt,
+    folder: "accessories",
+  },
+  {
+    id: "music",
+    title: "Music Player",
+    label: "Music Player",
+    icon: <Cdplayer107 variant="32x32_4" />,
+    smallIcon: <Cdplayer107 variant="16x16_4" />,
+    width: 0,
+    component: MusicPlayer,
+    fixedSize: true,
+    folder: "accessories",
   },
   {
     id: "games",

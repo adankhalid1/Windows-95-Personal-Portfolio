@@ -2052,3 +2052,422 @@ p {
   box-shadow: var(--bevel-in);
   background: #e0e0e0;
 }
+
+/* ---------- Accessories ---------- */
+
+.calculator {
+  width: 260px;
+  padding: 6px;
+  background: var(--face);
+}
+
+.calc-display {
+  margin-bottom: 8px;
+  padding: 4px 6px;
+  background: #fff;
+  box-shadow: var(--bevel-in);
+  font: 18px "Courier New", monospace;
+  text-align: right;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.calc-top {
+  display: grid;
+  grid-template-columns: 34px 1fr 1fr 1fr;
+  gap: 5px;
+  margin-bottom: 6px;
+}
+
+.calc-mem {
+  display: grid;
+  place-items: center;
+  box-shadow: var(--bevel-in);
+  font-weight: 700;
+}
+
+.calc-grid {
+  display: grid;
+  grid-template-columns: 34px repeat(5, 1fr);
+  gap: 5px;
+}
+
+.calc-btn {
+  min-width: 0;
+  padding: 5px 0;
+  font-size: 13px;
+}
+
+.calc-btn.red {
+  color: #c00000;
+}
+
+.calc-btn.blue {
+  color: #0000c0;
+}
+
+.notepad-app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 220px;
+}
+
+.notepad-area {
+  flex: 1;
+  min-height: 160px;
+  padding: 4px;
+  border: 0;
+  box-shadow: var(--bevel-in);
+  font: 14px "Fixedsys", "Courier New", monospace;
+  resize: none;
+  outline: none;
+}
+
+.cmd-screen {
+  height: 100%;
+  min-height: 240px;
+  padding: 6px;
+  overflow: auto;
+  font: 14px/1.25 "Courier New", monospace;
+  cursor: text;
+  user-select: text;
+}
+
+.cmd-line {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.cmd-input-line {
+  display: flex;
+}
+
+.cmd-input {
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  outline: none;
+  caret-shape: block;
+}
+
+.paint {
+  padding: 2px;
+  background: var(--face);
+  max-width: calc(100vw - 40px);
+}
+
+.paint-body {
+  display: flex;
+  gap: 4px;
+}
+
+.paint-tools {
+  display: grid;
+  grid-template-columns: repeat(2, 26px);
+  grid-auto-rows: 26px;
+  gap: 1px;
+  align-content: start;
+}
+
+.paint-tool {
+  padding: 0;
+  border: 0;
+  background: var(--face);
+  box-shadow: var(--bevel-out);
+  font-size: 14px;
+  line-height: 1;
+}
+
+.paint-tool.on {
+  box-shadow: var(--bevel-in);
+  background: #e8e8e8;
+}
+
+.paint-options {
+  grid-column: span 2;
+  grid-row: span 2;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 2px;
+  box-shadow: var(--bevel-in);
+}
+
+.paint-options button {
+  display: grid;
+  place-items: center;
+  height: 12px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: 11px;
+  line-height: 1;
+}
+
+.paint-options button.on {
+  background: var(--navy);
+  color: #fff;
+}
+
+.paint-options span {
+  display: block;
+  background: currentColor;
+  border-radius: 50%;
+}
+
+.paint-canvas-wrap {
+  position: relative;
+  padding: 2px;
+  background: var(--shadow);
+  box-shadow: var(--bevel-in);
+  max-width: calc(100vw - 110px);
+  overflow: auto;
+}
+
+.paint-canvas {
+  display: block;
+  max-width: 100%;
+  touch-action: none;
+  cursor: crosshair;
+}
+
+.paint-canvas.tool-fill,
+.paint-canvas.tool-picker {
+  cursor: cell;
+}
+
+.paint-overlay {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  max-width: calc(100% - 4px);
+  pointer-events: none;
+}
+
+.paint-palette {
+  display: flex;
+  gap: 6px;
+  margin-top: 4px;
+  align-items: center;
+}
+
+.paint-current {
+  position: relative;
+  width: 30px;
+  height: 30px;
+  flex: none;
+  box-shadow: var(--bevel-in);
+  background: #fff;
+}
+
+.paint-current span {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border: 1px solid #000;
+}
+
+.paint-current .fg {
+  top: 4px;
+  left: 4px;
+}
+
+.paint-current .bg {
+  right: 4px;
+  bottom: 4px;
+}
+
+.paint-swatches {
+  display: grid;
+  grid-template-columns: repeat(14, 15px);
+  grid-auto-rows: 15px;
+  gap: 1px;
+}
+
+.paint-swatches button {
+  padding: 0;
+  border: 0;
+  box-shadow: var(--bevel-in);
+}
+
+.music {
+  width: 300px;
+  padding: 4px;
+  background: #1f1f2e;
+  color: #00e000;
+  font: 12px Arial, sans-serif;
+}
+
+.music-top {
+  display: flex;
+  gap: 4px;
+}
+
+.music-lcd {
+  padding: 4px;
+  background: #000;
+  box-shadow: var(--bevel-in);
+}
+
+.music-time {
+  font: 700 22px "Courier New", monospace;
+  letter-spacing: 1px;
+}
+
+.music-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.music-marquee {
+  overflow: hidden;
+  padding: 3px;
+  background: #000;
+  white-space: nowrap;
+}
+
+.music-marquee span {
+  display: inline-block;
+  padding-left: 100%;
+  animation: music-scroll 14s linear infinite;
+}
+
+@keyframes music-scroll {
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+.music-meta {
+  display: flex;
+  justify-content: space-between;
+  padding: 2px 3px;
+  background: #000;
+  font-size: 10px;
+}
+
+.music-seek,
+.music-volume input {
+  accent-color: #00c000;
+}
+
+.music-seek {
+  width: 100%;
+  margin: 6px 0 2px;
+}
+
+.music-controls {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.music-controls .win-btn {
+  min-width: 0;
+  width: 30px;
+  padding: 2px 0;
+}
+
+.music-volume {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-left: auto;
+}
+
+.music-volume input {
+  width: 70px;
+}
+
+.music-playlist {
+  max-height: 120px;
+  margin: 6px 0 4px;
+  padding: 2px;
+  overflow: auto;
+  list-style: none;
+  background: #000;
+  box-shadow: var(--bevel-in);
+}
+
+.music-playlist button {
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+  width: 100%;
+  padding: 1px 3px;
+  border: 0;
+  background: none;
+  color: #00e000;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.music-playlist button.current {
+  color: #fff;
+  background: #0000c0;
+}
+
+.music-footer {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.music-footer .win-btn {
+  min-width: 0;
+  color: #000;
+}
+
+.music-footer .muted {
+  color: #8080a0;
+  font-size: 11px;
+}
+
+.screensaver {
+  position: fixed;
+  inset: 0;
+  z-index: 5000;
+  width: 100vw;
+  height: 100vh;
+  background: #000;
+  cursor: none;
+}
+
+.monitor-screen.saver-flying,
+.monitor-screen.saver-starfield,
+.monitor-screen.saver-mystify,
+.monitor-screen.saver-none {
+  background: #000;
+}
+
+.monitor-screen.saver-flying {
+  background:
+    radial-gradient(circle at 30% 40%, #ff2a1a 0 3px, transparent 4px),
+    radial-gradient(circle at 60% 60%, #2a5cff 0 4px, transparent 5px),
+    radial-gradient(circle at 75% 30%, #22c322 0 2px, transparent 3px),
+    #000;
+}
+
+.monitor-screen.saver-starfield {
+  background:
+    radial-gradient(circle at 20% 30%, #fff 0 1px, transparent 2px),
+    radial-gradient(circle at 70% 20%, #fff 0 1px, transparent 2px),
+    radial-gradient(circle at 50% 70%, #fff 0 1px, transparent 2px),
+    radial-gradient(circle at 85% 60%, #fff 0 1px, transparent 2px),
+    #000;
+}
+
+.monitor-screen.saver-mystify {
+  background:
+    linear-gradient(135deg, transparent 45%, #ff40ff 46% 48%, transparent 49%),
+    linear-gradient(45deg, transparent 45%, #40ffff 46% 48%, transparent 49%),
+    #000;
+}

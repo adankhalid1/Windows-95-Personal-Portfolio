@@ -1,5 +1,5 @@
 import { TitleBar } from "@react95/core";
-import { useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import { Win95Modal } from "./Win95Modal";
 import type { AppDef } from "../apps/registry";
 import { WindowIdContext } from "../hooks/useWindowKeys";
@@ -22,12 +22,24 @@ function AppWindow({ app, slot, zIndex }: AppWindowProps) {
   // Cascade from the top-left, but never push the window off a narrow screen.
   // Self-sizing windows (width 0) are assumed to be at most 320px wide.
   const fitWidth = app.width || 320;
-  const left = `min(${offset + 96}px, max(8px, calc(100vw - ${fitWidth}px - 24px)))`;
+  const [nudgedLeft, setNudgedLeft] = useState<number | null>(null);
+  const left = nudgedLeft ?? `min(${offset + 96}px, max(8px, calc(100vw - ${fitWidth}px - 24px)))`;
+  const frame = useRef<HTMLDivElement>(null);
+
+  // Self-sizing windows can turn out wider than guessed: once open, slide
+  // left if the window would hang off the right edge of the screen.
+  useLayoutEffect(() => {
+    const el = frame.current;
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    if (r.right > window.innerWidth - 4) setNudgedLeft(Math.max(4, window.innerWidth - r.width - 4));
+  }, []);
   const canMaximize = !app.fixedSize;
   const toggleMaximized = () => canMaximize && setMaximized((m) => !m);
 
   return (
     <Win95Modal
+      ref={frame}
       id={app.id}
       icon={app.smallIcon}
       title={app.title}

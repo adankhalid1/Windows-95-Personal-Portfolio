@@ -25,6 +25,9 @@ interface UiState {
   /** Opens a profile link, asking first if it leads off this site. */
   openLink: (link: Link) => void;
   cancelLeave: () => void;
+  /** Show the screensaver right now (Preview button, or Run "scrnsave"). */
+  screensaverNow: boolean;
+  setScreensaverNow: (on: boolean) => void;
 }
 
 export const useUi = create<UiState>((set) => ({
@@ -43,4 +46,6 @@ export const useUi = create<UiState>((set) => ({
     set({ leaving: link });
   },
   cancelLeave: () => set({ leaving: null }),
+  screensaverNow: false,
+  setScreensaverNow: (screensaverNow) => set({ screensaverNow }),
 }));

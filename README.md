@@ -16,7 +16,7 @@ icon opens a draggable window.
 | Minesweeper | 9x9, 10 mines. Right-click to flag (🚩 flag mode on phones). Help > How to Play explains the rules |
 | Chess | Play the computer as White or Black on Easy, Normal or Hard. Undo, pawn promotion, and Help > How to Play |
 | Games (folder) | Solitaire (with the bouncing-cards win), FreeCell (the original numbered deals), Hearts vs three computer players, Snake, Blocks (falling pieces), Pong, Checkers, Tic-Tac-Toe, Connect Four, 2048, Sudoku, plus Minesweeper and Chess |
-| Accessories (folder) | Handy little programs |
+| Accessories (folder) | Calculator, Notepad (saves in your browser), Paint, Command Prompt (explore my info MS-DOS style), Music Player (built-in chiptunes or your own files) |
 | Recycle Bin | Old stuff. You can empty it |
 
 The Start menu has every program (with Games and Accessories submenus), a "Find me on..." submenu, Settings,
@@ -32,13 +32,16 @@ Run..., and Shut Down (shut down, restart, or log off all work).
 - **Deleted icons** go to the Recycle Bin. Double-click one there to restore it.
 - **Display Properties** (desktop right-click > Properties, or Start > Settings)
   changes the wallpaper (image, preset color, or any custom color) and icon size.
-- **Run...** opens programs by their classic names: `winmine`, `notepad`,
-  `wordpad`, `explorer`, `taskmgr`, `control`, or any website address.
+- **Run...** opens programs by their classic names: `winmine`, `sol`, `calc`,
+  `mspaint`, `cmd`, `notepad`, `wordpad`, `explorer`, `taskmgr`, `control`,
+  `scrnsave`, or any website address.
   Anything else gets the classic "Cannot find the file" error.
 - **Ctrl+Alt+Del** (or Ctrl+Shift+Esc) opens Close Program to end or switch tasks.
 - **Click the clock** for a calendar; hover it for the full date.
 - **Maximize** windows from the title bar button or by double-clicking the
   title bar, and resize them from the bottom-right corner.
+- **Screen saver:** Flying Windows, Starfield or Mystify kicks in after a minute
+  of no activity. Change it in Display Properties > Screen Saver.
 
 Desktop settings live in the visitor's browser (localStorage), so each visitor
 gets their own arrangement.
@@ -48,6 +51,9 @@ gets their own arrangement.
 Nearly everything personal lives in **`src/data/profile.ts`**: name, bio,
 links, experience, education, skills, and projects. Edit that file and the
 whole site updates.
+
+To add your own songs to the Music Player, drop audio files in `public/music`
+and list them in `src/data/music.ts`.
 
 To add a new window:
 
