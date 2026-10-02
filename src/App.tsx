@@ -1,48 +1,55 @@
-import { AGENTS, ClippyProvider } from "@react95/clippy";
+import { ModalEvents, useModal } from "@react95/core";
+import { useEffect } from "react";
+import { APPS } from "./apps/registry";
+import AppWindow from "./components/AppWindow";
+import BootScreen from "./components/BootScreen";
+import Desktop from "./components/Desktop";
 import Login from "./components/Login";
-import WindowBar from "./components/WindowBar";
-import { useAuth } from "./store/auth";
-import DesktopIcon from "./components/DesktopIcon";
-import Contact from "./components/Contact";
-import { Amovie2, Inetcpl1313, Joy102, Wordpad, Mail } from "@react95/icons";
-import { Video } from "@react95/core";
-import Resume from "./components/Resume";
-import Game from "./components/Game";
+import ShutdownScreen from "./components/ShutdownScreen";
+import Taskbar from "./components/Taskbar";
+import { useSession } from "./store/session";
+import { useWindowsStore } from "./store/windows";
 
 function App() {
-  const authinicated = useAuth((state) => state.authinicated);
-  return (
-    <div style={{ width: "100%", background: "#098684", minHeight: "100vh",position:"relative" }}>
-      <img src="/logo.png" width={400} style={{position:"absolute",top:"50%",left:"50%",transform:"translate(-50%,-70%)"}}/>
-      {!authinicated && <Login />}
+  const phase = useSession((s) => s.phase);
+  const openWindows = useWindowsStore((s) => s.openWindows);
+  const bringToFront = useWindowsStore((s) => s.bringToFront);
+  const { subscribe } = useModal();
 
-      {authinicated && (
-        <ClippyProvider agentName={AGENTS.MERLIN}>
-          <div className="fixed">
-            <DesktopIcon icon={<Amovie2 variant="32x32_4"/>} name="Video">
-              <Video
-                w="420px"
-                src="https://media.w3.org/2010/05/sintel/trailer_hd.mp4"
-                
-              />
-            </DesktopIcon>
-            <DesktopIcon icon={<Inetcpl1313 variant="32x32_4"/>} name="Browser">
-             <iframe width={800} height={500} src="https://swisscows.com"/>
-            </DesktopIcon>
-            <DesktopIcon width={650} icon={<Wordpad variant="32x32_4"/>} name="Resume">
-             <Resume/>
-            </DesktopIcon>
-            <DesktopIcon width={400} height={400} icon={<Joy102 variant="32x32_4"/>} name="Game">
-             <Game/>
-            </DesktopIcon>
-            <DesktopIcon width={400} icon={<Mail variant="32x32_4"/>} name="Contact">
-             <Contact/>
-            </DesktopIcon>
-          </div>
-          <WindowBar />
-        </ClippyProvider>
+  // react95 only raises the focused window and leaves the rest in DOM order,
+  // so keep our own back-to-front stack and hand each window its z-index.
+  useEffect(
+    () =>
+      subscribe(ModalEvents.ModalVisibilityChanged, ({ id }) => {
+        if (id) bringToFront(id);
+      }),
+    [subscribe, bringToFront],
+  );
+
+  if (phase === "boot") return <BootScreen />;
+  if (phase === "shutdown") return <ShutdownScreen />;
+
+  return (
+    <main className="screen">
+      {phase === "login" && <Login />}
+      {phase === "desktop" && (
+        <>
+          <Desktop />
+          {APPS.map(
+            (app, slot) =>
+              openWindows.includes(app.id) && (
+                <AppWindow
+                  key={app.id}
+                  app={app}
+                  slot={slot}
+                  zIndex={10 + openWindows.indexOf(app.id)}
+                />
+              ),
+          )}
+          <Taskbar />
+        </>
       )}
-    </div>
+    </main>
   );
 }
 

@@ -1,19 +1,29 @@
 import { create } from "zustand";
 
 interface WindowStore {
+  /** Open window ids, back-to-front: the last one is drawn on top. */
   openWindows: string[];
-  openWindow: (title: string) => void;
-  closeWindow: (title: string) => void;
-  isWindowOpen: (title: string) => boolean;
+  openWindow: (id: string) => void;
+  bringToFront: (id: string) => void;
+  closeWindow: (id: string) => void;
+  closeAll: () => void;
 }
 
-export const useWindowsStore = create<WindowStore>((set, get) => ({
+export const useWindowsStore = create<WindowStore>((set) => ({
   openWindows: [],
-  openWindow: (title) =>
-    set((state) => ({ openWindows: [...new Set([...state.openWindows, title])] })),
-  closeWindow: (title) =>
+  openWindow: (id) =>
     set((state) => ({
-      openWindows: state.openWindows.filter((w) => w !== title),
+      openWindows: [...state.openWindows.filter((w) => w !== id), id],
     })),
-  isWindowOpen: (title) => get().openWindows.includes(title),
+  bringToFront: (id) =>
+    set((state) =>
+      state.openWindows.includes(id) && state.openWindows.at(-1) !== id
+        ? { openWindows: [...state.openWindows.filter((w) => w !== id), id] }
+        : state,
+    ),
+  closeWindow: (id) =>
+    set((state) => ({
+      openWindows: state.openWindows.filter((w) => w !== id),
+    })),
+  closeAll: () => set({ openWindows: [] }),
 }));

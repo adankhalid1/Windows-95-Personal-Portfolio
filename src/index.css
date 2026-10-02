@@ -1,76 +1,583 @@
-*{
-    user-select: none;
+:root {
+  --desktop: #008080;
+  --navy: #000080;
+  --face: #c0c0c0;
+  --shadow: #808080;
+  --hilite: #ffffff;
+  --dark: #000000;
+  --bevel-out: inset -1px -1px var(--dark), inset 1px 1px var(--hilite),
+    inset -2px -2px var(--shadow), inset 2px 2px #dfdfdf;
+  --bevel-in: inset -1px -1px var(--hilite), inset 1px 1px var(--shadow),
+    inset -2px -2px #dfdfdf, inset 2px 2px var(--dark);
+
+  /* App windows stack from z-index 10 upward; keep the taskbar above them. */
+  --r95-zIndex-taskbar: 1000 !important;
+  --r95-zIndex-tooltip: 1001 !important;
 }
-/* === Display === */
-.hidden               { display: none; }
-.block                { display: block; }
-.inline-block         { display: inline-block; }
-.inline               { display: inline; }
-.flex                 { display: flex; }
-.inline-flex          { display: inline-flex; }
-.grid                 { display: grid; }
-.inline-grid          { display: inline-grid; }
-.contents             { display: contents; }
-.table                { display: table; }
 
-/* === Position === */
-.static               { position: static; }
-.relative             { position: relative; }
-.absolute             { position: absolute; }
-.fixed                { position: fixed; }
-.sticky               { position: sticky; }
+* {
+  box-sizing: border-box;
+}
 
-/* === Top / Right / Bottom / Left === */
-.top-0                { top: 0px; }
-.right-0              { right: 0px; }
-.bottom-0             { bottom: 0px; }
-.left-0               { left: 0px; }
+html,
+body,
+#root {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  background: #000;
+}
 
-.inset-0              { top: 0; right: 0; bottom: 0; left: 0; }
-.inset-x-0            { left: 0; right: 0; }
-.inset-y-0            { top: 0; bottom: 0; }
+body {
+  user-select: none;
+  -webkit-font-smoothing: none;
+}
 
-.top-half              { top: 50% !important; }
-.left-half          { left: 50% !important; }
+p {
+  margin: 0 0 6px;
+}
 
-.-translate-x-half     { transform: translateX(-50%) !important; }
-.-translate-y-half     { transform: translateY(-50%) !important; }
-.translate  {translate: -50%;}
-.translate-x-full     { transform: translateX(100%); }
-.translate-y-full     { transform: translateY(100%); }
+.muted {
+  color: #555;
+}
 
-/* === Z-Index === */
-.z-0                  { z-index: 0; }
-.z-10                 { z-index: 10; }
-.z-20                 { z-index: 20; }
-.z-30                 { z-index: 30; }
-.z-40                 { z-index: 40; }
-.z-50                 { z-index: 50; }
-.z-auto               { z-index: auto; }
+.screen {
+  position: relative;
+  height: 100%;
+  background: var(--desktop);
+}
 
-/* === Flex Utilities (for layout) === */
-.flex-row             { flex-direction: row; }
-.flex-col             { flex-direction: column; }
-.items-center         { align-items: center; }
-.justify-center       { justify-content: center; }
-.justify-between      { justify-content: space-between; }
-.justify-around       { justify-content: space-around; }
-.justify-end          { justify-content: flex-end; }
+.dim {
+  position: fixed;
+  inset: 0;
+  z-index: 1999;
+}
 
-/* === Align (vertical alignment for inline elements) === */
-.align-top            { vertical-align: top; }
-.align-middle         { vertical-align: middle; }
-.align-bottom         { vertical-align: bottom; }
+/* ---------- Boot ---------- */
 
+.bios {
+  height: 100%;
+  padding: 24px;
+  color: #c0c0c0;
+  background: #000;
+  font-family: "Courier New", monospace;
+  font-size: 15px;
+}
 
-.gap-0                { gap: 0px; }
-.gap-1                { gap: 0.25rem; /* 4px */ }
-.gap-2                { gap: 0.5rem;  /* 8px */ }
-.gap-3                { gap: 0.75rem; /* 12px */ }
-.gap-4                { gap: 1rem;    /* 16px */ }
-.gap-6                { gap: 1.5rem;  /* 24px */ }
-.gap-8                { gap: 2rem;    /* 32px */ }
-.gap-10               { gap: 2.5rem;  /* 40px */ }
+.bios pre {
+  margin: 0;
+  white-space: pre-wrap;
+}
 
-.gap-x-4              { column-gap: 1rem; }
-.gap-y-4              { row-gap: 1rem; }
+.bios-hint {
+  position: absolute;
+  bottom: 16px;
+  color: #666;
+}
+
+.splash {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(#3a6ea5, #8fb8e8 60%, #d8e8f8);
+  color: #fff;
+}
+
+.splash-logo {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.35);
+}
+
+.splash-logo small {
+  display: block;
+  font-size: 20px;
+  font-style: italic;
+}
+
+.splash-logo strong {
+  font-size: clamp(40px, 9vw, 72px);
+  letter-spacing: -1px;
+}
+
+.splash-logo sup {
+  font-size: 0.5em;
+  color: #ffeb3b;
+}
+
+.splash-flag {
+  width: 96px;
+  height: 96px;
+  image-rendering: pixelated;
+}
+
+.splash-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 10px;
+  background: repeating-linear-gradient(
+    90deg,
+    #000080 0 40px,
+    #1084d0 40px 80px,
+    #8fb8e8 80px 120px,
+    #1084d0 120px 160px
+  );
+  background-size: 160px 100%;
+  animation: splash-scroll 0.8s linear infinite;
+}
+
+@keyframes splash-scroll {
+  to {
+    background-position: 160px 0;
+  }
+}
+
+.safe-to-turn-off {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: #000;
+  color: #ff8c00;
+  font: 700 clamp(22px, 4vw, 40px) "Courier New", monospace;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.safe-to-turn-off small {
+  margin-top: 24px;
+  font-size: 13px;
+  color: #555;
+}
+
+/* ---------- Login & dialogs ---------- */
+
+.login,
+.shutdown-dialog {
+  left: 50% !important;
+  top: 40% !important;
+  transform: translate(-50%, -50%) !important;
+  width: min(470px, calc(100vw - 24px));
+}
+
+.shutdown-dialog {
+  z-index: 2000 !important;
+}
+
+.login-body {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.login-fields {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.login-fields label,
+.compose label {
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  align-items: center;
+}
+
+.login-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 80px;
+}
+
+.shutdown-body {
+  display: flex;
+  gap: 16px;
+  padding: 8px;
+}
+
+.shutdown-body > div {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.shutdown-body label {
+  height: auto !important;
+  min-height: 20px;
+}
+
+.button-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.button-row.center {
+  justify-content: center;
+}
+
+.button-row button,
+.login-buttons button {
+  min-width: 76px;
+}
+
+/* ---------- Desktop ---------- */
+
+.desktop {
+  position: absolute;
+  inset: 0 0 28px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 4px;
+}
+
+.desktop-icon {
+  width: 84px;
+  padding: 4px;
+  border: 0;
+  background: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  color: #fff;
+  font: inherit;
+  font-size: 12px;
+  cursor: default;
+}
+
+.desktop-icon svg,
+.desktop-icon img {
+  width: 32px;
+  height: 32px;
+}
+
+.desktop-icon span {
+  padding: 1px 3px;
+  border: 1px dotted transparent;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.desktop-icon:focus {
+  outline: none;
+}
+
+.desktop-icon.selected svg,
+.desktop-icon.selected img {
+  filter: sepia(1) hue-rotate(190deg) saturate(4) brightness(0.6);
+}
+
+.desktop-icon.selected span {
+  background: var(--navy);
+  border-color: #ffff80;
+}
+
+/* ---------- Start menu ---------- */
+
+.start-menu {
+  display: flex;
+  background: var(--face);
+  box-shadow: var(--bevel-out);
+  padding: 2px;
+}
+
+.start-menu > ul {
+  box-shadow: none !important;
+}
+
+.start-banner {
+  width: 26px;
+  background: linear-gradient(to top, var(--navy), #1084d0);
+  color: #c0c0c0;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  padding: 6px 0;
+  font-family: Arial, sans-serif;
+  font-size: 18px;
+  letter-spacing: 1px;
+}
+
+.start-banner b {
+  color: #fff;
+}
+
+/* ---------- Windows ---------- */
+
+.app-window-content {
+  overflow: auto;
+  background: var(--face);
+}
+
+.notepad {
+  height: 100%;
+  padding: 6px;
+  background: #fff;
+  box-shadow: var(--bevel-in);
+  font-family: "Fixedsys", "Courier New", monospace;
+  font-size: 14px;
+  white-space: pre-wrap;
+  user-select: text;
+  overflow: auto;
+}
+
+.system-props {
+  display: flex;
+  gap: 16px;
+  padding: 8px;
+}
+
+.system-props fieldset {
+  margin-bottom: 8px;
+}
+
+.resume {
+  user-select: text;
+}
+
+.resume ul {
+  margin: 4px 0 0;
+  padding-left: 20px;
+}
+
+.resume fieldset {
+  margin-bottom: 10px;
+}
+
+.resume-role {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.chip {
+  padding: 2px 6px;
+  background: var(--face);
+  box-shadow: var(--bevel-out);
+}
+
+/* ---------- Explorer-style lists ---------- */
+
+.explorer,
+.project-details {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 4px;
+}
+
+.explorer-toolbar,
+.explorer-address {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.explorer-address span {
+  flex: 1;
+  padding: 3px 4px;
+  background: #fff;
+  box-shadow: var(--bevel-in);
+}
+
+.explorer-list {
+  flex: 1;
+  overflow: auto;
+  padding: 2px;
+  background: #fff;
+  box-shadow: var(--bevel-in);
+}
+
+.explorer-row {
+  display: grid;
+  grid-template-columns: 1fr 100px 50px;
+  gap: 8px;
+  align-items: center;
+  padding: 2px 4px;
+  cursor: default;
+}
+
+.explorer-row:focus {
+  outline: 1px dotted #000;
+}
+
+.explorer-row.selected {
+  background: var(--navy);
+  color: #fff;
+}
+
+.explorer-head {
+  box-shadow: var(--bevel-out);
+  background: var(--face);
+  position: sticky;
+  top: 0;
+}
+
+.explorer-name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.explorer-name svg {
+  flex: none;
+  width: 16px;
+  height: 16px;
+}
+
+.statusbar {
+  padding: 2px 4px;
+  box-shadow: var(--bevel-in);
+  font-size: 12px;
+}
+
+.project-details {
+  user-select: text;
+}
+
+.project-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.project-header h3 {
+  margin: 0;
+}
+
+/* ---------- Contact ---------- */
+
+.contact {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.compose {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.compose textarea {
+  resize: vertical;
+}
+
+.compose button {
+  align-self: flex-end;
+  min-width: 76px;
+}
+
+.contact-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.contact-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--navy);
+}
+
+/* ---------- Minesweeper ---------- */
+
+.mines {
+  padding: 6px;
+  background: var(--face);
+  box-shadow: var(--bevel-out);
+}
+
+.mines-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px;
+  margin-bottom: 6px;
+  box-shadow: var(--bevel-in);
+}
+
+.mines-counter {
+  min-width: 42px;
+  padding: 0 2px;
+  background: #000;
+  color: #f00;
+  font: 700 22px/26px "Courier New", monospace;
+  text-align: center;
+}
+
+.mines-face {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  background: var(--face);
+  box-shadow: var(--bevel-out);
+  font-size: 16px;
+  line-height: 1;
+}
+
+.mines-face:active {
+  box-shadow: var(--bevel-in);
+}
+
+.mines-grid {
+  display: grid;
+  box-shadow: var(--bevel-in);
+  padding: 3px;
+}
+
+.mines-cell {
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: 0;
+  background: var(--face);
+  box-shadow: var(--bevel-out);
+  font: 700 13px/20px Arial, sans-serif;
+  cursor: default;
+}
+
+.mines-cell.revealed {
+  box-shadow: none;
+  border-right: 1px solid var(--shadow);
+  border-bottom: 1px solid var(--shadow);
+}
+
+.mines-cell.boom {
+  background: #f00;
+}
+
+.mines-cell[data-n="1"] { color: #0000ff; }
+.mines-cell[data-n="2"] { color: #008000; }
+.mines-cell[data-n="3"] { color: #ff0000; }
+.mines-cell[data-n="4"] { color: #000080; }
+.mines-cell[data-n="5"] { color: #800000; }
+.mines-cell[data-n="6"] { color: #008080; }
+.mines-cell[data-n="7"] { color: #000000; }
+.mines-cell[data-n="8"] { color: #808080; }

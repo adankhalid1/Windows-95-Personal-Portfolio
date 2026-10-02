@@ -1,55 +1,55 @@
-import { Button, Input, Modal, TitleBar } from "@react95/core";
+import { Button, Input } from "@react95/core";
+import { Win95Modal } from "./Win95Modal";
 import { Keys } from "@react95/icons";
-import { type ComponentType } from "react";
-import { useAuth } from "../store/auth";
+import { profile } from "../data/profile";
+import { useSession } from "../store/session";
 
 function Login() {
-    const login=useAuth((state)=>state.login);
+  const setPhase = useSession((s) => s.setPhase);
+  // Like the real thing, any password works and Cancel logs you in anyway.
+  const enter = () => setPhase("desktop");
+
   return (
-    <SafeModal
-      dragOptions={{
-        disabled: true,
-      }}
+    <Win95Modal
       title="Welcome to Windows"
-      style={{position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -90%)"}}
-      titleBarOptions={
-        [<TitleBar.Help
-          style={{marginBlock:"auto"}}
-          key="help"
-          onClick={() => {
-            alert("Help!");
-          }}
-        />]
-        
-      }
+      className="login"
+      hasWindowButton={false}
+      dragOptions={{ disabled: true }}
     >
-      <Modal.Content width="450px" height="160px" boxShadow="$in">
-        <div className="flex items-start justify-between gap-2">
-          <Keys width={50} height={50}/>
-          <div className="flex-col gap-4 flex">
-            <p style={{margin:0}}>Type your username and password to log in to your windows</p>
-            <div className="flex-col flex gap-4">
-              <div className="flex items-center gap-2">
-                <p style={{margin:0}}>username:</p>
-                <Input defaultValue={"admin"} disabled />
-              </div>
-              <div className="flex items-center gap-2">
-                <p style={{margin:0}}>password:</p>
-                <Input defaultValue={"admin"} type="password" disabled />
-              </div>
-            </div>
+      <Win95Modal.Content>
+        <form
+          className="login-body"
+          onSubmit={(e) => {
+            e.preventDefault();
+            enter();
+          }}
+        >
+          <Keys variant="32x32_4" style={{ width: 48, height: 48 }} />
+          <div className="login-fields">
+            <p>Type a user name and password to log on to Windows.</p>
+            <label>
+              <span>
+                <u>U</u>ser name:
+              </span>
+              <Input defaultValue={profile.handle} />
+            </label>
+            <label>
+              <span>
+                <u>P</u>assword:
+              </span>
+              <Input type="password" autoFocus placeholder="anything works" />
+            </label>
           </div>
-          <div className="flex-col gap-2 flex">
-            <Button style={{width:"100%"}} onClick={()=>login()}>Ok</Button>
-            <Button style={{width:"100%"}}>Cancel</Button>
+          <div className="login-buttons">
+            <Button type="submit">OK</Button>
+            <Button type="button" onClick={enter}>
+              Cancel
+            </Button>
           </div>
-        </div>
-      </Modal.Content>
-    </SafeModal>
+        </form>
+      </Win95Modal.Content>
+    </Win95Modal>
   );
 }
 
 export default Login;
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const SafeModal = Modal as unknown as ComponentType<any>;

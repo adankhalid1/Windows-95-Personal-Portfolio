@@ -1,5 +1,5 @@
 {
-  "name": "windows95",
+  "name": "win95-personal-portfolio",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -10,23 +10,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@react95/clippy": "^2.0.2",
     "@react95/core": "^9.6.0",
     "@react95/icons": "^2.2.0",
-    "@tailwindcss/vite": "^4.1.11",
-    "chess.js": "^1.4.0",
-    "prop-types": "^15.8.1",
     "react": "^19.1.0",
-    "react-chessboard": "^5.2.0",
     "react-dom": "^19.1.0",
     "react-icons": "^5.5.0",
-    "react-rnd": "^10.5.2",
-    "tailwindcss": "^4.1.11",
     "zustand": "^5.0.6"
   },
   "devDependencies": {
     "@eslint/js": "^9.30.1",
-    "@types/prop-types": "^15.7.15",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
     "@vitejs/plugin-react": "^4.6.0",
