@@ -1,11 +1,22 @@
 import { Button, Input, TextArea } from "@react95/core";
 import { useState } from "react";
-import { FaEnvelope, FaGithub, FaGlobe, FaLink, FaLinkedin } from "react-icons/fa";
+import {
+  FaEnvelope,
+  FaGithub,
+  FaGlobe,
+  FaInstagram,
+  FaLink,
+  FaLinkedin,
+  FaTiktok,
+} from "react-icons/fa";
 import { profile, type Link } from "../data/profile";
+import { useUi } from "../store/ui";
 
 const LINK_ICONS: Record<Link["kind"], typeof FaGithub> = {
   github: FaGithub,
   linkedin: FaLinkedin,
+  instagram: FaInstagram,
+  tiktok: FaTiktok,
   email: FaEnvelope,
   website: FaGlobe,
   other: FaLink,
@@ -15,6 +26,7 @@ const emailLink = profile.links.find((l) => l.kind === "email");
 const emailAddress = emailLink?.url.replace(/^mailto:/, "") ?? "";
 
 function Contact() {
+  const openLink = useUi((s) => s.openLink);
   const [subject, setSubject] = useState("");
   const [body, setBody] = useState("");
 
@@ -55,7 +67,16 @@ function Contact() {
         {profile.links.map((link) => {
           const Icon = LINK_ICONS[link.kind];
           return (
-            <a key={link.url} href={link.url} target="_blank" rel="noreferrer">
+            <a
+              key={link.url}
+              href={link.url}
+              target="_blank"
+              rel="noreferrer"
+              onClick={(e) => {
+                e.preventDefault();
+                openLink(link);
+              }}
+            >
               <Icon size={16} /> {link.label}
             </a>
           );

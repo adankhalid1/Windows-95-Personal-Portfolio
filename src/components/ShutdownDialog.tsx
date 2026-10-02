@@ -18,6 +18,7 @@ function ShutdownDialog({ close }: { close: () => void }) {
 
   const confirm = () => {
     closeAll();
+    close();
     setPhase(OPTIONS[choice].next);
   };
 
