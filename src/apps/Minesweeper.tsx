@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import MenuBar from "../components/MenuBar";
 
 const ROWS = 9;
 const COLS = 9;
@@ -119,7 +120,7 @@ function HowToPlay({ onClose }: { onClose: () => void }) {
         Tip: if a 1 already touches a flagged mine, every other square around it is safe.
       </p>
       <div className="button-row center">
-        <button className="mines-ok" onClick={onClose}>
+        <button className="win-btn" onClick={onClose}>
           OK
         </button>
       </div>
@@ -133,7 +134,6 @@ function Minesweeper() {
   const [board, setBoard] = useState(emptyBoard);
   const [status, setStatus] = useState<Status>("ready");
   const [seconds, setSeconds] = useState(0);
-  const [menu, setMenu] = useState<"game" | "help" | null>(null);
   const [showHelp, setShowHelp] = useState(false);
   const [flagMode, setFlagMode] = useState(false);
 
@@ -174,52 +174,23 @@ function Minesweeper() {
   const flags = board.filter((cell) => cell.flagged).length;
 
   const menuBar = (
-    <div className="mines-menubar" onMouseLeave={() => setMenu(null)}>
-      {(["game", "help"] as const).map((name) => (
-        <div key={name} className="mines-menu">
-          <button
-            className={menu === name ? "open" : undefined}
-            onClick={() => setMenu(menu === name ? null : name)}
-          >
-            {name === "game" ? (
-              <>
-                <u>G</u>ame
-              </>
-            ) : (
-              <>
-                <u>H</u>elp
-              </>
-            )}
-          </button>
-          {menu === name && (
-            <div className="mines-dropdown" role="menu">
-              {name === "game" ? (
-                <button
-                  role="menuitem"
-                  onClick={() => {
-                    reset();
-                    setShowHelp(false);
-                    setMenu(null);
-                  }}
-                >
-                  New
-                </button>
-              ) : (
-                <button
-                  role="menuitem"
-                  onClick={() => {
-                    setShowHelp(true);
-                    setMenu(null);
-                  }}
-                >
-                  How to Play
-                </button>
-              )}
-            </div>
-          )}
-        </div>
-      ))}
-    </div>
+    <MenuBar
+      menus={[
+        {
+          label: "Game",
+          items: [
+            {
+              label: "New",
+              onClick: () => {
+                reset();
+                setShowHelp(false);
+              },
+            },
+          ],
+        },
+        { label: "Help", items: [{ label: "How to Play", onClick: () => setShowHelp(true) }] },
+      ]}
+    />
   );
 
   if (showHelp) {

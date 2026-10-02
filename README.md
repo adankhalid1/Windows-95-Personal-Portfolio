@@ -14,6 +14,7 @@ icon opens a draggable window.
 | Resume.doc | Experience, education, and skills in tabs |
 | Contact Me | A mail composer that opens your mail app, plus my links |
 | Minesweeper | 9x9, 10 mines. Right-click to flag (🚩 flag mode on phones). Help > How to Play explains the rules |
+| Chess | Play the computer as White or Black on Easy, Normal or Hard. Undo, pawn promotion, and Help > How to Play |
 | Recycle Bin | Old stuff. You can empty it |
 
 The Start menu has every program, a "Find me on..." submenu, Settings,
@@ -68,6 +69,7 @@ npm run lint
 - [React95](https://github.com/react95/react95) (`@react95/core` and `@react95/icons`) for the Win95 widgets and icons
 - React 19, TypeScript, Vite
 - Zustand for window and session state
+- [chess.js](https://github.com/jhlywa/chess.js) (BSD-2-Clause) for chess rules; the board and computer opponent are written for this site
 
 ## Credits
 

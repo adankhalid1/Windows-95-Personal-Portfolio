@@ -4,6 +4,7 @@ import {
   Computer3,
   Desk100,
   Folder,
+  Joy102,
   Mail,
   Notepad,
   RecycleFull,
@@ -11,6 +12,7 @@ import {
   Wordpad,
 } from "@react95/icons";
 import AboutMe from "./AboutMe";
+import Chess from "./chess/Chess";
 import CloseProgram from "./CloseProgram";
 import Contact from "./Contact";
 import DisplayProperties from "./DisplayProperties";
@@ -96,6 +98,16 @@ export const APPS: AppDef[] = [
     smallIcon: <Winmine1 variant="16x16_4" />,
     width: 0, // sizes itself to the board
     component: Minesweeper,
+    fixedSize: true,
+  },
+  {
+    id: "chess",
+    title: "Chess",
+    label: "Chess",
+    icon: <Joy102 variant="32x32_4" />,
+    smallIcon: <Joy102 variant="16x16_4" />,
+    width: 0, // sizes itself to the board
+    component: Chess,
     fixedSize: true,
   },
   {

@@ -17,8 +17,8 @@ function AppWindow({ app, slot, zIndex }: AppWindowProps) {
   const Content = app.component;
   const offset = 24 + slot * 28;
   // Cascade from the top-left, but never push the window off a narrow screen.
-  // Self-sizing windows (width 0) are assumed to be about 240px wide.
-  const fitWidth = app.width || 240;
+  // Self-sizing windows (width 0) are assumed to be at most 320px wide.
+  const fitWidth = app.width || 320;
   const left = `min(${offset + 96}px, max(8px, calc(100vw - ${fitWidth}px - 24px)))`;
   const canMaximize = !app.fixedSize;
   const toggleMaximized = () => canMaximize && setMaximized((m) => !m);

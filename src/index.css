@@ -898,17 +898,19 @@ p {
   box-shadow: var(--bevel-out);
 }
 
-.mines-menubar {
+/* ---------- In-window menu bar (Game, Help, ...) ---------- */
+
+.menubar {
   display: flex;
   margin: -2px 0 6px;
 }
 
-.mines-menu {
+.menubar-menu {
   position: relative;
 }
 
-.mines-menubar > .mines-menu > button,
-.mines-dropdown button {
+.menubar-menu > button,
+.menubar-dropdown button {
   padding: 1px 6px;
   border: 0;
   background: none;
@@ -916,31 +918,68 @@ p {
   color: #000;
 }
 
-.mines-menubar > .mines-menu > button.open,
-.mines-dropdown button:hover,
-.mines-dropdown button:focus-visible {
+.menubar-menu > button.open,
+.menubar-dropdown button:not(:disabled):hover,
+.menubar-dropdown button:not(:disabled):focus-visible {
   background: var(--navy);
   color: #fff;
   outline: none;
 }
 
-.mines-dropdown {
+.menubar-dropdown {
   position: absolute;
   top: 100%;
   left: 0;
   z-index: 5;
-  min-width: 120px;
+  min-width: 140px;
   padding: 2px;
   background: var(--face);
   box-shadow: var(--bevel-out);
 }
 
-.mines-dropdown button {
-  display: block;
+.menubar-dropdown button {
+  display: flex;
   width: 100%;
-  padding: 3px 16px 3px 8px;
+  padding: 3px 16px 3px 2px;
   text-align: left;
   white-space: nowrap;
+}
+
+.menubar-dropdown button:disabled {
+  color: var(--shadow);
+  text-shadow: 1px 1px #fff;
+}
+
+.menubar-check {
+  width: 16px;
+  flex: none;
+  text-align: center;
+}
+
+.menubar-divider {
+  margin: 3px 2px;
+  border: 0;
+  border-top: 1px solid var(--shadow);
+  border-bottom: 1px solid #fff;
+}
+
+.win-btn {
+  min-width: 76px;
+  padding: 3px 8px;
+  border: 0;
+  background: var(--face);
+  box-shadow: var(--bevel-out);
+  font: inherit;
+  color: #000;
+}
+
+.win-btn:active:not(:disabled) {
+  box-shadow: var(--bevel-in);
+}
+
+.win-btn:disabled {
+  color: var(--shadow);
+  text-shadow: 1px 1px #fff;
 }
 
 .mines-help {
@@ -966,7 +1005,6 @@ p {
   margin-bottom: 4px;
 }
 
-.mines-ok,
 .mines-flag-toggle {
   min-width: 76px;
   padding: 3px 8px;
@@ -977,7 +1015,6 @@ p {
   color: #000;
 }
 
-.mines-ok:active,
 .mines-flag-toggle.on {
   box-shadow: var(--bevel-in);
 }
@@ -1056,3 +1093,188 @@ p {
 .mines-cell[data-n="6"] { color: #008080; }
 .mines-cell[data-n="7"] { color: #000000; }
 .mines-cell[data-n="8"] { color: #808080; }
+
+/* ---------- Chess ---------- */
+
+.chess {
+  width: 290px;
+  padding: 6px;
+  background: var(--face);
+}
+
+.chess-board {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  aspect-ratio: 1;
+  box-shadow: var(--bevel-in);
+  padding: 2px;
+  background: var(--shadow);
+}
+
+.chess-square {
+  position: relative;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  aspect-ratio: 1;
+  cursor: pointer;
+}
+
+.chess-square.light {
+  background: #d8d8d8;
+}
+
+.chess-square.dark {
+  background: #4f8f8f;
+}
+
+.chess-square.last {
+  box-shadow: inset 0 0 0 100px rgba(255, 255, 80, 0.35);
+}
+
+.chess-square.selected {
+  box-shadow: inset 0 0 0 100px rgba(255, 255, 0, 0.6);
+}
+
+.chess-square.check {
+  background: radial-gradient(circle, #ff3030 0%, #ff3030 35%, transparent 75%), #d8d8d8;
+}
+
+.chess-square.target::after {
+  content: "";
+  position: absolute;
+  width: 28%;
+  height: 28%;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.chess-square.capture::after {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  border: 3px solid rgba(0, 0, 0, 0.4);
+  border-radius: 50%;
+}
+
+.chess-square:focus-visible {
+  outline: 1px dotted #000;
+  outline-offset: -3px;
+}
+
+.chess-piece {
+  position: relative;
+  z-index: 1;
+  font: 28px/1 "Segoe UI Symbol", "DejaVu Sans", "Noto Sans Symbols 2", "Apple Symbols", serif;
+  pointer-events: none;
+}
+
+.piece-w {
+  color: #fff;
+  text-shadow:
+    -1px -1px 0 #000,
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+    1px 1px 0 #000;
+}
+
+.piece-b {
+  color: #000;
+  text-shadow: 0 0 1px #fff;
+}
+
+.chess-coord {
+  position: absolute;
+  font: 9px/1 Arial, sans-serif;
+  color: rgba(0, 0, 0, 0.55);
+  pointer-events: none;
+}
+
+.chess-coord.rank {
+  top: 2px;
+  left: 2px;
+}
+
+.chess-coord.file {
+  right: 2px;
+  bottom: 1px;
+}
+
+.chess-tray {
+  display: flex;
+  flex-wrap: wrap;
+  min-height: 20px;
+  padding: 1px 2px;
+}
+
+.chess-tray .chess-piece {
+  font-size: 16px;
+  margin-right: -2px;
+}
+
+.chess-status {
+  margin-top: 2px;
+}
+
+.chess-status.over {
+  font-weight: 700;
+}
+
+.chess-promotion {
+  position: absolute;
+  inset: 25% 8%;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: var(--face);
+  box-shadow: var(--bevel-out);
+}
+
+.chess-promotion p {
+  margin: 0;
+}
+
+.chess-promotion div {
+  display: flex;
+  gap: 4px;
+}
+
+.chess-promotion div button {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  background: #d8d8d8;
+  box-shadow: var(--bevel-out);
+  cursor: pointer;
+}
+
+.chess-promotion .chess-piece {
+  font-size: 32px;
+}
+
+.chess-help {
+  padding: 8px;
+  background: #fff;
+  box-shadow: var(--bevel-in);
+  font-size: 12px;
+  user-select: text;
+}
+
+.chess-help h3 {
+  margin: 0 0 6px;
+}
+
+.chess-help ul {
+  margin: 6px 0;
+  padding-left: 14px;
+}
+
+.chess-help li {
+  margin-bottom: 4px;
+}
