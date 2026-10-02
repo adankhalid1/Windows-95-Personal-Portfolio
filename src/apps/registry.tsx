@@ -20,6 +20,10 @@ import AboutMe from "./AboutMe";
 import Chess from "./chess/Chess";
 import FreeCell from "./cards/FreeCell";
 import Hearts from "./cards/Hearts";
+import Blocks from "./arcade/Blocks";
+import Pong from "./arcade/Pong";
+import Snake from "./arcade/Snake";
+import { BLOCKS, PONG, SNAKE } from "./pixelIcons";
 import Solitaire from "./cards/Solitaire";
 import CloseProgram from "./CloseProgram";
 import Contact from "./Contact";
@@ -159,6 +163,36 @@ export const APPS: AppDef[] = [
     smallIcon: <Mshearts1 variant="32x32_4" width={16} height={16} />,
     width: 0,
     component: Hearts,
+    fixedSize: true,
+    folder: "games",
+  },
+  {
+    id: "snake",
+    title: "Snake",
+    label: "Snake",
+    ...SNAKE,
+    width: 0,
+    component: Snake,
+    fixedSize: true,
+    folder: "games",
+  },
+  {
+    id: "blocks",
+    title: "Blocks",
+    label: "Blocks",
+    ...BLOCKS,
+    width: 0,
+    component: Blocks,
+    fixedSize: true,
+    folder: "games",
+  },
+  {
+    id: "pong",
+    title: "Pong",
+    label: "Pong",
+    ...PONG,
+    width: 0,
+    component: Pong,
     fixedSize: true,
     folder: "games",
   },
