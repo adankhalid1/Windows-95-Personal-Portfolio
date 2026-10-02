@@ -1,4 +1,4 @@
-import { TitleBar } from "@react95/core";
+import { TitleBar, useModal } from "@react95/core";
 import { useLayoutEffect, useRef, useState } from "react";
 import { Win95Modal } from "./Win95Modal";
 import type { AppDef } from "../apps/registry";
@@ -14,6 +14,7 @@ interface AppWindowProps {
 
 function AppWindow({ app, slot, zIndex }: AppWindowProps) {
   const closeWindow = useWindowsStore((s) => s.closeWindow);
+  const { minimize, focus } = useModal();
   const [maximized, setMaximized] = useState(false);
   const Content = app.component;
   // Cascade like Windows does, wrapping back to the top so later apps in a
@@ -50,7 +51,16 @@ function AppWindow({ app, slot, zIndex }: AppWindowProps) {
         if ((e.target as HTMLElement).closest(".draggable")) toggleMaximized();
       }}
       titleBarOptions={[
-        <Win95Modal.Minimize key="minimize" />,
+        // react95's own Minimize button guesses which window it's in from
+        // the last focus event, which a touch drag can throw off; this one
+        // always minimizes its own window.
+        <TitleBar.Minimize
+          key="minimize"
+          onClick={() => {
+            minimize(app.id);
+            focus("no-id");
+          }}
+        />,
         ...(canMaximize
           ? [
               maximized ? (

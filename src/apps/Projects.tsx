@@ -4,6 +4,9 @@ import { useState } from "react";
 import { profile, type Project } from "../data/profile";
 import { FileExe } from "./icons";
 
+// On touch screens a double-tap is awkward, so a single tap opens.
+const singleClickOpens = window.matchMedia("(pointer: coarse)").matches;
+
 function ProjectDetails({ project, onBack }: { project: Project; onBack: () => void }) {
   return (
     <div className="project-details">
@@ -70,7 +73,7 @@ function Projects() {
             role="button"
             tabIndex={0}
             className={`explorer-row${selected === project.name ? " selected" : ""}`}
-            onClick={() => setSelected(project.name)}
+            onClick={() => (singleClickOpens ? setOpened(project) : setSelected(project.name))}
             onDoubleClick={() => setOpened(project)}
             onKeyDown={(e) => e.key === "Enter" && setOpened(project)}
           >
@@ -84,7 +87,7 @@ function Projects() {
         ))}
       </div>
       <div className="statusbar">
-        {profile.projects.length} object(s) &middot; double-click to open
+        {profile.projects.length} object(s) &middot; {singleClickOpens ? "tap" : "double-click"} to open
       </div>
     </div>
   );

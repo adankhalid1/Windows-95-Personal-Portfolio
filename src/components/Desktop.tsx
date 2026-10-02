@@ -1,5 +1,5 @@
 import { RecycleEmpty } from "@react95/icons";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { APPS, isOnDesktop, type AppDef } from "../apps/registry";
 import { useLongPress } from "../hooks/useLongPress";
 import { useOpenApp } from "../hooks/useOpenApp";
@@ -31,6 +31,30 @@ interface Drag {
   originX: number;
   originY: number;
   moved: boolean;
+}
+
+/**
+ * `n` points evenly spaced along an ellipse's edge (equal distance, not equal
+ * angle, so an oval doesn't bunch icons together), starting at the top and
+ * going clockwise. For a circle this is the same as equal angles.
+ */
+function evenlyAround(n: number, rx: number, ry: number): { x: number; y: number }[] {
+  const SAMPLES = 720;
+  const pts = Array.from({ length: SAMPLES + 1 }, (_, i) => {
+    const a = -Math.PI / 2 + (i / SAMPLES) * 2 * Math.PI;
+    return { x: rx * Math.cos(a), y: ry * Math.sin(a) };
+  });
+  const dist = [0];
+  for (let i = 1; i <= SAMPLES; i++) {
+    dist.push(dist[i - 1] + Math.hypot(pts[i].x - pts[i - 1].x, pts[i].y - pts[i - 1].y));
+  }
+  const total = dist[SAMPLES];
+  return Array.from({ length: n }, (_, k) => {
+    const target = (k / n) * total;
+    let i = 0;
+    while (dist[i + 1] < target) i++;
+    return pts[i];
+  });
 }
 
 function useDesktopSize(ref: React.RefObject<HTMLDivElement | null>) {
@@ -66,12 +90,27 @@ function Desktop() {
   // Default layout: About Me sits dead center and the other icons are spaced
   // evenly around a circle, starting at the top and going clockwise.
   const ring = icons.filter((app) => app.id !== CENTER_ICON);
-  const radius = Math.max(
-    // never so tight that neighbors overlap...
-    cell.w / (2 * Math.sin(Math.PI / Math.max(ring.length, 2))),
-    // ...but otherwise as big as fits, up to a comfortable size
-    Math.min(MAX_RADIUS, Math.min(size.w - cell.w, size.h - cell.h) / 2 - PAD),
-  );
+  // A circle when there's room; on narrow (phone) screens it would be too
+  // tight, so it stretches into a tall oval instead.
+  const fitX = Math.min(MAX_RADIUS, (size.w - cell.w) / 2 - PAD);
+  const fitY = Math.min(MAX_RADIUS, (size.h - cell.h) / 2 - PAD);
+  const ringSpots = useMemo(() => {
+    const clear = (spots: { x: number; y: number }[]) =>
+      spots.every((a, i) => {
+        const b = spots[(i + 1) % spots.length];
+        return Math.abs(a.x - b.x) >= cell.w || Math.abs(a.y - b.y) >= cell.h;
+      });
+    const r = Math.min(fitX, fitY);
+    const round = evenlyAround(ring.length, r, r);
+    if (clear(round) || ring.length < 2) return round;
+    // Too tight for a circle: keep the width, grow the height until no two
+    // neighbors overlap (or we run out of screen).
+    for (let ry = fitX; ry < fitY; ry += 8) {
+      const oval = evenlyAround(ring.length, fitX, ry);
+      if (clear(oval)) return oval;
+    }
+    return evenlyAround(ring.length, fitX, fitY);
+  }, [ring.length, fitX, fitY, cell.w, cell.h]);
 
   // Whole pixels only, so the 1px pixel-art icons never land on half pixels.
   const clamp = (x: number, y: number) => ({
@@ -84,12 +123,8 @@ function Desktop() {
     const saved = positions[id];
     if (saved) return clamp(saved.x, saved.y);
     if (id === CENTER_ICON) return clamp(size.w / 2 - cell.w / 2, size.h / 2 - cell.h / 2);
-    const slot = ring.findIndex((app) => app.id === id);
-    const angle = -Math.PI / 2 + (slot / ring.length) * 2 * Math.PI;
-    return clamp(
-      size.w / 2 + radius * Math.cos(angle) - cell.w / 2,
-      size.h / 2 + radius * Math.sin(angle) - cell.h / 2,
-    );
+    const spot = ringSpots[ring.findIndex((app) => app.id === id)];
+    return clamp(size.w / 2 + spot.x - cell.w / 2, size.h / 2 + spot.y - cell.h / 2);
   };
 
   const iconMenu = (app: AppDef): MenuEntry[] => [
