@@ -21,7 +21,7 @@ Run..., and Shut Down (shut down, restart, or log off all work).
 
 ### Desktop tricks
 
-- Icons start out **arranged in a circle** in the middle of the screen.
+- Icons start out **arranged in a circle**, with About Me.txt in the middle.
 - **Drag icons** anywhere (mouse or touch). Positions are remembered;
   right-click the desktop > Arrange Icons puts them back in the circle.
 - **Right-click** (or long-press on a phone) the desktop for Arrange Icons,

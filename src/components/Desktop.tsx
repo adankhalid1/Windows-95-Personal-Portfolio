@@ -16,6 +16,8 @@ const CELL: Record<IconSize, { w: number; h: number }> = {
 };
 const PAD = 8;
 const MAX_RADIUS = 300;
+/** Icon placed in the middle of the circle. */
+const CENTER_ICON = "about";
 const DRAG_THRESHOLD = 4;
 /** Icons that can't be dragged to the Recycle Bin. */
 const PROTECTED = new Set(["my-computer", "recycle-bin"]);
@@ -61,25 +63,29 @@ function Desktop() {
 
   const cell = CELL[iconSize];
   const icons = APPS.filter((app) => !app.startMenuOnly && !recycled.includes(app.id));
-  // Default layout: icons spaced evenly around a circle in the middle of the
-  // desktop, starting at the top and going clockwise.
+  // Default layout: About Me sits dead center and the other icons are spaced
+  // evenly around a circle, starting at the top and going clockwise.
+  const ring = icons.filter((app) => app.id !== CENTER_ICON);
   const radius = Math.max(
     // never so tight that neighbors overlap...
-    cell.w / (2 * Math.sin(Math.PI / Math.max(icons.length, 2))),
+    cell.w / (2 * Math.sin(Math.PI / Math.max(ring.length, 2))),
     // ...but otherwise as big as fits, up to a comfortable size
     Math.min(MAX_RADIUS, Math.min(size.w - cell.w, size.h - cell.h) / 2 - PAD),
   );
 
+  // Whole pixels only, so the 1px pixel-art icons never land on half pixels.
   const clamp = (x: number, y: number) => ({
-    x: Math.min(Math.max(0, x), Math.max(0, size.w - cell.w)),
-    y: Math.min(Math.max(0, y), Math.max(0, size.h - cell.h)),
+    x: Math.round(Math.min(Math.max(0, x), Math.max(0, size.w - cell.w))),
+    y: Math.round(Math.min(Math.max(0, y), Math.max(0, size.h - cell.h))),
   });
 
-  const positionOf = (id: string, index: number) => {
+  const positionOf = (id: string) => {
     if (dragPos?.id === id) return dragPos;
     const saved = positions[id];
     if (saved) return clamp(saved.x, saved.y);
-    const angle = -Math.PI / 2 + (index / icons.length) * 2 * Math.PI;
+    if (id === CENTER_ICON) return clamp(size.w / 2 - cell.w / 2, size.h / 2 - cell.h / 2);
+    const slot = ring.findIndex((app) => app.id === id);
+    const angle = -Math.PI / 2 + (slot / ring.length) * 2 * Math.PI;
     return clamp(
       size.w / 2 + radius * Math.cos(angle) - cell.w / 2,
       size.h / 2 + radius * Math.sin(angle) - cell.h / 2,
@@ -126,12 +132,12 @@ function Desktop() {
     }
   });
 
-  const onIconPointerDown = (e: React.PointerEvent, app: AppDef, index: number) => {
+  const onIconPointerDown = (e: React.PointerEvent, app: AppDef) => {
     if (e.button !== 0) return;
     e.stopPropagation();
     pressedId.current = app.id;
     longPress.handlers.onPointerDown(e);
-    const origin = positionOf(app.id, index);
+    const origin = positionOf(app.id);
     drag.current = {
       id: app.id,
       pointerId: e.pointerId,
@@ -189,8 +195,8 @@ function Desktop() {
         if (e.target === e.currentTarget) showContextMenu(e.clientX, e.clientY, desktopMenu);
       }}
     >
-      {!refreshing && icons.map((app, index) => {
-        const pos = positionOf(app.id, index);
+      {!refreshing && icons.map((app) => {
+        const pos = positionOf(app.id);
         const icon = app.id === "recycle-bin" && recycled.length === 0 ? emptyBinIcon : app.icon;
         return (
           <button
@@ -199,7 +205,7 @@ function Desktop() {
               dragPos?.id === app.id ? " dragging" : ""
             }`}
             style={{ left: pos.x, top: pos.y, width: cell.w }}
-            onPointerDown={(e) => onIconPointerDown(e, app, index)}
+            onPointerDown={(e) => onIconPointerDown(e, app)}
             onPointerMove={onIconPointerMove}
             onPointerUp={(e) => onIconPointerUp(e, app)}
             onPointerCancel={() => {
