@@ -1,7 +1,7 @@
 import { List, TaskBar } from "@react95/core";
 import { Computer3, Folder, Globe, Rundll1, Settings } from "@react95/icons";
 import { useEffect, useRef, useState } from "react";
-import { APPS } from "../apps/registry";
+import { APPS, appsInFolder } from "../apps/registry";
 import { profile } from "../data/profile";
 import { useOpenApp } from "../hooks/useOpenApp";
 import { useUi } from "../store/ui";
@@ -10,6 +10,11 @@ import SocialIcon from "./SocialIcon";
 import { isSocial, SOCIAL_KINDS, type SocialKind } from "../data/social";
 
 const FAVORITES = ["about", "projects", "resume", "contact"];
+const FOLDERS = [
+  { id: "games", label: "Games" },
+  { id: "accessories", label: "Accessories" },
+] as const;
+const FOLDER_IDS = new Set<string>(FOLDERS.map((f) => f.id));
 
 const socialLinks = profile.links
   .filter((link) => isSocial(link.kind))
@@ -75,15 +80,33 @@ function Taskbar() {
               {socialLinks.length > 0 && <List.Divider />}
               <List.Item icon={<Folder variant="32x32_4" />}>
                 <List width="200px">
-                  {APPS.filter((app) => !app.startMenuOnly).map((app) => (
-                    <List.Item
-                      key={app.id}
-                      icon={app.smallIcon}
-                      onClick={() => openApp(app.id)}
-                    >
-                      {app.label}
+                  {FOLDERS.map(({ id, label }) => (
+                    <List.Item key={id} icon={<Folder variant="16x16_4" />}>
+                      <List width="190px">
+                        {appsInFolder(id).map((app) => (
+                          <List.Item
+                            key={app.id}
+                            icon={app.smallIcon}
+                            onClick={() => openApp(app.id)}
+                          >
+                            {app.label}
+                          </List.Item>
+                        ))}
+                      </List>
+                      {label}
                     </List.Item>
                   ))}
+                  {APPS.filter((app) => !app.startMenuOnly && !app.folder && !FOLDER_IDS.has(app.id)).map(
+                    (app) => (
+                      <List.Item
+                        key={app.id}
+                        icon={app.smallIcon}
+                        onClick={() => openApp(app.id)}
+                      >
+                        {app.label}
+                      </List.Item>
+                    ),
+                  )}
                 </List>
                 Programs
               </List.Item>

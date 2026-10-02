@@ -631,6 +631,62 @@ p {
   resize: none;
 }
 
+/* ---------- Folder windows (Games, Accessories) ---------- */
+
+.folder-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
+  align-content: start;
+  gap: 6px;
+  padding: 8px;
+  overflow: auto;
+  background: #fff;
+  box-shadow: var(--bevel-in);
+}
+
+.folder-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 2px;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 12px;
+  color: #000;
+  cursor: default;
+}
+
+.folder-item svg,
+.folder-item img {
+  width: 32px;
+  height: 32px;
+  image-rendering: pixelated;
+}
+
+.folder-item span {
+  padding: 1px 3px;
+  border: 1px dotted transparent;
+  text-align: center;
+}
+
+.folder-item:focus {
+  outline: none;
+}
+
+.folder-item.selected span {
+  background: var(--navy);
+  color: #fff;
+  border-color: #ffff80;
+}
+
+.folder-item.selected svg,
+.folder-item.selected img {
+  filter: sepia(1) hue-rotate(190deg) saturate(4) brightness(0.6);
+}
+
 /* ---------- Display Properties / Close Program ---------- */
 
 .display-props {
@@ -1277,4 +1333,282 @@ p {
 
 .chess-help li {
   margin-bottom: 4px;
+}
+
+/* ---------- Playing cards (Solitaire, FreeCell, Hearts) ---------- */
+
+.card-game {
+  max-width: calc(100vw - 40px);
+  padding: 4px;
+  background: var(--face);
+}
+
+.card-board {
+  position: relative;
+  background: #008000;
+  box-shadow: var(--bevel-in);
+  overflow: hidden;
+  touch-action: none;
+}
+
+.card,
+.card-slot {
+  position: absolute;
+  border-radius: 4px;
+  user-select: none;
+  touch-action: none;
+}
+
+.card {
+  border: 1px solid #000;
+  background: #fff;
+  font-family: Arial, sans-serif;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.card.red {
+  color: #d00000;
+}
+
+.card.black {
+  color: #000;
+}
+
+.card.back {
+  background:
+    repeating-linear-gradient(45deg, transparent 0 3px, rgba(255, 255, 255, 0.35) 3px 4px),
+    repeating-linear-gradient(-45deg, transparent 0 3px, rgba(255, 255, 255, 0.35) 3px 4px),
+    #1c3fa8;
+  box-shadow: inset 0 0 0 2px #fff;
+}
+
+.card.selected {
+  filter: invert(0.85) hue-rotate(180deg);
+}
+
+.card.dragging {
+  pointer-events: none;
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.35);
+}
+
+.card-corner {
+  position: absolute;
+  top: 2px;
+  left: 3px;
+  text-align: center;
+  font-size: 0.85em;
+}
+
+.card-corner.bottom {
+  top: auto;
+  left: auto;
+  right: 3px;
+  bottom: 2px;
+  transform: rotate(180deg);
+}
+
+.card-center {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 1.9em;
+}
+
+.card-center.face {
+  font-family: "Times New Roman", serif;
+  font-size: 2.1em;
+}
+
+.card-slot {
+  display: grid;
+  place-items: center;
+  border: 1px solid #00c000;
+  color: #00c000;
+  font: 700 18px Arial, sans-serif;
+  cursor: pointer;
+}
+
+.card-dialog {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  z-index: 1500;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px;
+  background: var(--face);
+  box-shadow: var(--bevel-out);
+  font-size: 13px;
+}
+
+.card-dialog label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.card-dialog input {
+  padding: 3px;
+  border: 0;
+  box-shadow: var(--bevel-in);
+  font: inherit;
+}
+
+.bouncing-cards {
+  position: absolute;
+  inset: 0;
+  z-index: 2000;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+.card-status {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.card-status .win-btn {
+  min-width: 0;
+  padding: 1px 8px;
+}
+
+.game-help {
+  max-height: min(420px, calc(100vh - 160px));
+  overflow: auto;
+  padding: 8px;
+  background: #fff;
+  box-shadow: var(--bevel-in);
+  font-size: 12px;
+  user-select: text;
+}
+
+.game-help h3 {
+  margin: 0 0 6px;
+}
+
+.game-help ul {
+  margin: 6px 0;
+  padding-left: 16px;
+}
+
+.game-help li {
+  margin-bottom: 4px;
+}
+
+/* ---------- Hearts ---------- */
+
+.hearts-seat {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  color: #fff;
+  font-size: 12px;
+}
+
+.hearts-seat.seat-1 {
+  left: 6px;
+  top: 38%;
+}
+
+.hearts-seat.seat-2 {
+  top: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.hearts-seat.seat-3 {
+  right: 6px;
+  top: 38%;
+}
+
+.hearts-backs {
+  display: flex;
+}
+
+.hearts-back {
+  width: 14px;
+  height: 22px;
+  margin-left: -9px;
+  border: 1px solid #000;
+  border-radius: 2px;
+  background:
+    repeating-linear-gradient(45deg, transparent 0 2px, rgba(255, 255, 255, 0.4) 2px 3px),
+    #1c3fa8;
+}
+
+.hearts-back:first-child {
+  margin-left: 0;
+}
+
+.hearts-name {
+  padding: 0 4px;
+  white-space: nowrap;
+  text-shadow: 1px 1px 0 #000;
+}
+
+.hearts-seat.active .hearts-name {
+  background: var(--navy);
+  text-shadow: none;
+}
+
+.hearts-name.you {
+  position: absolute;
+  bottom: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #fff;
+  font-size: 12px;
+}
+
+.hearts-card {
+  transition: top 0.12s;
+}
+
+.hearts-card.unplayable {
+  filter: brightness(0.7);
+  cursor: not-allowed;
+}
+
+.hearts-pass {
+  position: absolute;
+  left: 50%;
+  top: 46%;
+  z-index: 40;
+  transform: translateX(-50%);
+}
+
+.hearts-scores {
+  top: 12%;
+  align-items: center;
+}
+
+.hearts-scores p {
+  margin: 0;
+}
+
+.hearts-scores table {
+  border-collapse: collapse;
+  background: #fff;
+  box-shadow: var(--bevel-in);
+}
+
+.hearts-scores th,
+.hearts-scores td {
+  padding: 2px 8px;
+  text-align: right;
+}
+
+.hearts-scores td:first-child {
+  text-align: left;
 }

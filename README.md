@@ -15,9 +15,11 @@ icon opens a draggable window.
 | Contact Me | A mail composer that opens your mail app, plus my links |
 | Minesweeper | 9x9, 10 mines. Right-click to flag (🚩 flag mode on phones). Help > How to Play explains the rules |
 | Chess | Play the computer as White or Black on Easy, Normal or Hard. Undo, pawn promotion, and Help > How to Play |
+| Games (folder) | Solitaire (with the bouncing-cards win), FreeCell (the original numbered deals), Hearts vs three computer players, plus Minesweeper and Chess |
+| Accessories (folder) | Handy little programs |
 | Recycle Bin | Old stuff. You can empty it |
 
-The Start menu has every program, a "Find me on..." submenu, Settings,
+The Start menu has every program (with Games and Accessories submenus), a "Find me on..." submenu, Settings,
 Run..., and Shut Down (shut down, restart, or log off all work).
 
 ### Desktop tricks

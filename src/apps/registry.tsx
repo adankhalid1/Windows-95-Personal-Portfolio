@@ -4,23 +4,34 @@ import {
   Computer3,
   Desk100,
   Folder,
+  FolderExe,
+  FolderSettings,
+  Freecell1,
   Joy102,
   Mail,
+  Mshearts1,
   Notepad,
   RecycleFull,
+  Sol1,
   Winmine1,
   Wordpad,
 } from "@react95/icons";
 import AboutMe from "./AboutMe";
 import Chess from "./chess/Chess";
+import FreeCell from "./cards/FreeCell";
+import Hearts from "./cards/Hearts";
+import Solitaire from "./cards/Solitaire";
 import CloseProgram from "./CloseProgram";
 import Contact from "./Contact";
 import DisplayProperties from "./DisplayProperties";
+import { AccessoriesFolder, GamesFolder } from "./FolderView";
 import Minesweeper from "./Minesweeper";
 import MyComputer from "./MyComputer";
 import Projects from "./Projects";
 import RecycleBin from "./RecycleBin";
 import Resume from "./Resume";
+
+export type FolderId = "games" | "accessories";
 
 export interface AppDef {
   id: string;
@@ -35,8 +46,12 @@ export interface AppDef {
   width: number;
   height?: number;
   component: ComponentType;
-  /** Hide from the desktop (still reachable from the start menu). */
+  /** System tools: only reachable from Start > Settings. */
   startMenuOnly?: boolean;
+  /** Lives in the Games or Accessories folder (and Start menu submenu). */
+  folder?: FolderId;
+  /** Also put a shortcut on the desktop (default: only apps with no folder). */
+  onDesktop?: boolean;
   /** Fixed-size windows can't be resized or maximized. */
   fixedSize?: boolean;
 }
@@ -99,6 +114,8 @@ export const APPS: AppDef[] = [
     width: 0, // sizes itself to the board
     component: Minesweeper,
     fixedSize: true,
+    folder: "games",
+    onDesktop: true,
   },
   {
     id: "chess",
@@ -109,6 +126,61 @@ export const APPS: AppDef[] = [
     width: 0, // sizes itself to the board
     component: Chess,
     fixedSize: true,
+    folder: "games",
+    onDesktop: true,
+  },
+  {
+    id: "solitaire",
+    title: "Solitaire",
+    label: "Solitaire",
+    icon: <Sol1 variant="32x32_4" />,
+    smallIcon: <Sol1 variant="16x16_4" />,
+    width: 0,
+    component: Solitaire,
+    fixedSize: true,
+    folder: "games",
+  },
+  {
+    id: "freecell",
+    title: "FreeCell",
+    label: "FreeCell",
+    icon: <Freecell1 variant="32x32_4" />,
+    smallIcon: <Freecell1 variant="32x32_4" width={16} height={16} />,
+    width: 0,
+    component: FreeCell,
+    fixedSize: true,
+    folder: "games",
+  },
+  {
+    id: "hearts",
+    title: "Hearts",
+    label: "Hearts",
+    icon: <Mshearts1 variant="32x32_4" />,
+    smallIcon: <Mshearts1 variant="32x32_4" width={16} height={16} />,
+    width: 0,
+    component: Hearts,
+    fixedSize: true,
+    folder: "games",
+  },
+  {
+    id: "games",
+    title: "Games",
+    label: "Games",
+    icon: <FolderExe variant="32x32_4" />,
+    smallIcon: <FolderExe variant="16x16_4" />,
+    width: 440,
+    height: 300,
+    component: GamesFolder,
+  },
+  {
+    id: "accessories",
+    title: "Accessories",
+    label: "Accessories",
+    icon: <FolderSettings variant="32x32_4" />,
+    smallIcon: <FolderSettings variant="16x16_4" />,
+    width: 440,
+    height: 260,
+    component: AccessoriesFolder,
   },
   {
     id: "recycle-bin",
@@ -145,3 +217,8 @@ export const APPS: AppDef[] = [
 ];
 
 export const getApp = (id: string) => APPS.find((app) => app.id === id);
+
+export const isOnDesktop = (app: AppDef) =>
+  app.onDesktop ?? (!app.folder && !app.startMenuOnly);
+
+export const appsInFolder = (folder: FolderId) => APPS.filter((app) => app.folder === folder);

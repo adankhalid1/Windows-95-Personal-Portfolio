@@ -1,6 +1,6 @@
 import { RecycleEmpty } from "@react95/icons";
 import { useEffect, useRef, useState } from "react";
-import { APPS, type AppDef } from "../apps/registry";
+import { APPS, isOnDesktop, type AppDef } from "../apps/registry";
 import { useLongPress } from "../hooks/useLongPress";
 import { useOpenApp } from "../hooks/useOpenApp";
 import { useDesktop, type IconSize } from "../store/desktop";
@@ -62,7 +62,7 @@ function Desktop() {
   const pressedId = useRef<string | null>(null);
 
   const cell = CELL[iconSize];
-  const icons = APPS.filter((app) => !app.startMenuOnly && !recycled.includes(app.id));
+  const icons = APPS.filter((app) => isOnDesktop(app) && !recycled.includes(app.id));
   // Default layout: About Me sits dead center and the other icons are spaced
   // evenly around a circle, starting at the top and going clockwise.
   const ring = icons.filter((app) => app.id !== CENTER_ICON);
