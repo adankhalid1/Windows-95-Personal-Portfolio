@@ -15,6 +15,7 @@ const CELL: Record<IconSize, { w: number; h: number }> = {
   large: { w: 100, h: 96 },
 };
 const PAD = 8;
+const MAX_RADIUS = 300;
 const DRAG_THRESHOLD = 4;
 /** Icons that can't be dragged to the Recycle Bin. */
 const PROTECTED = new Set(["my-computer", "recycle-bin"]);
@@ -60,7 +61,14 @@ function Desktop() {
 
   const cell = CELL[iconSize];
   const icons = APPS.filter((app) => !app.startMenuOnly && !recycled.includes(app.id));
-  const rows = Math.max(1, Math.floor((size.h - PAD) / cell.h));
+  // Default layout: icons spaced evenly around a circle in the middle of the
+  // desktop, starting at the top and going clockwise.
+  const radius = Math.max(
+    // never so tight that neighbors overlap...
+    cell.w / (2 * Math.sin(Math.PI / Math.max(icons.length, 2))),
+    // ...but otherwise as big as fits, up to a comfortable size
+    Math.min(MAX_RADIUS, Math.min(size.w - cell.w, size.h - cell.h) / 2 - PAD),
+  );
 
   const clamp = (x: number, y: number) => ({
     x: Math.min(Math.max(0, x), Math.max(0, size.w - cell.w)),
@@ -71,10 +79,11 @@ function Desktop() {
     if (dragPos?.id === id) return dragPos;
     const saved = positions[id];
     if (saved) return clamp(saved.x, saved.y);
-    return {
-      x: PAD + Math.floor(index / rows) * cell.w,
-      y: PAD + (index % rows) * cell.h,
-    };
+    const angle = -Math.PI / 2 + (index / icons.length) * 2 * Math.PI;
+    return clamp(
+      size.w / 2 + radius * Math.cos(angle) - cell.w / 2,
+      size.h / 2 + radius * Math.sin(angle) - cell.h / 2,
+    );
   };
 
   const iconMenu = (app: AppDef): MenuEntry[] => [

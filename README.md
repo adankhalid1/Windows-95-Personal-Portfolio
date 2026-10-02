@@ -21,7 +21,9 @@ Run..., and Shut Down (shut down, restart, or log off all work).
 
 ### Desktop tricks
 
-- **Drag icons** anywhere (mouse or touch). Positions are remembered.
+- Icons start out **arranged in a circle** in the middle of the screen.
+- **Drag icons** anywhere (mouse or touch). Positions are remembered;
+  right-click the desktop > Arrange Icons puts them back in the circle.
 - **Right-click** (or long-press on a phone) the desktop for Arrange Icons,
   icon size, and Properties; right-click an icon to open or delete it.
 - **Deleted icons** go to the Recycle Bin. Double-click one there to restore it.
