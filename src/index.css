@@ -44,7 +44,7 @@ p {
 .screen {
   position: relative;
   height: 100%;
-  background: var(--desktop);
+  background: var(--desktop) url("./assets/wallpaper.jpg") center / cover no-repeat;
 }
 
 .dim {
@@ -269,6 +269,7 @@ p {
 
 .desktop-icon span {
   padding: 1px 3px;
+  text-shadow: 1px 1px 1px #000;
   border: 1px dotted transparent;
   text-align: center;
   line-height: 1.2;
@@ -284,6 +285,7 @@ p {
 }
 
 .desktop-icon.selected span {
+  text-shadow: none;
   background: var(--navy);
   border-color: #ffff80;
 }
