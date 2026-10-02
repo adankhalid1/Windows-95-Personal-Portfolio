@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import MenuBar from "../../components/MenuBar";
+import { useWindowKeys } from "../../hooks/useWindowKeys";
 import { isTouch, useHighScore } from "./highScore";
 
 const COLS = 20;
@@ -154,7 +155,7 @@ function Snake() {
     return () => clearTimeout(timer);
   }, [status, draw, submit]);
 
-  const onKey = (e: React.KeyboardEvent) => {
+  useWindowKeys((e) => {
     const key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
     if (DIRS[key]) {
       e.preventDefault();
@@ -167,7 +168,7 @@ function Snake() {
       else if (status === "paused") setStatus("playing");
       else if (status === "over") restart();
     }
-  };
+  });
 
   const message =
     status === "ready"
@@ -213,7 +214,6 @@ function Snake() {
               autoFocus
               className="arcade-canvas"
               aria-label="Snake board"
-              onKeyDown={onKey}
               onPointerDown={(e) => {
                 e.currentTarget.focus();
                 swipe.current = { x: e.clientX, y: e.clientY };

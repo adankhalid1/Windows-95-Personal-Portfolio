@@ -23,7 +23,21 @@ import Hearts from "./cards/Hearts";
 import Blocks from "./arcade/Blocks";
 import Pong from "./arcade/Pong";
 import Snake from "./arcade/Snake";
-import { BLOCKS, PONG, SNAKE } from "./pixelIcons";
+import Checkers from "./brain/Checkers";
+import ConnectFour from "./brain/ConnectFour";
+import Game2048 from "./brain/Game2048";
+import Sudoku from "./brain/Sudoku";
+import TicTacToe from "./brain/TicTacToe";
+import {
+  BLOCKS,
+  CHECKERS,
+  CONNECT_FOUR,
+  GAME_2048,
+  PONG,
+  SNAKE,
+  SUDOKU,
+  TICTACTOE,
+} from "./pixelIcons";
 import Solitaire from "./cards/Solitaire";
 import CloseProgram from "./CloseProgram";
 import Contact from "./Contact";
@@ -193,6 +207,56 @@ export const APPS: AppDef[] = [
     ...PONG,
     width: 0,
     component: Pong,
+    fixedSize: true,
+    folder: "games",
+  },
+  {
+    id: "checkers",
+    title: "Checkers",
+    label: "Checkers",
+    ...CHECKERS,
+    width: 0,
+    component: Checkers,
+    fixedSize: true,
+    folder: "games",
+  },
+  {
+    id: "tictactoe",
+    title: "Tic-Tac-Toe",
+    label: "Tic-Tac-Toe",
+    ...TICTACTOE,
+    width: 0,
+    component: TicTacToe,
+    fixedSize: true,
+    folder: "games",
+  },
+  {
+    id: "connect4",
+    title: "Connect Four",
+    label: "Connect Four",
+    ...CONNECT_FOUR,
+    width: 0,
+    component: ConnectFour,
+    fixedSize: true,
+    folder: "games",
+  },
+  {
+    id: "2048",
+    title: "2048",
+    label: "2048",
+    ...GAME_2048,
+    width: 0,
+    component: Game2048,
+    fixedSize: true,
+    folder: "games",
+  },
+  {
+    id: "sudoku",
+    title: "Sudoku",
+    label: "Sudoku",
+    ...SUDOKU,
+    width: 0,
+    component: Sudoku,
     fixedSize: true,
     folder: "games",
   },

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import MenuBar from "../../components/MenuBar";
+import { useWindowKeys } from "../../hooks/useWindowKeys";
 import { isTouch, useHighScore } from "./highScore";
 
 const COLS = 10;
@@ -290,7 +291,7 @@ function Blocks() {
     canvas.current?.focus();
   };
 
-  const onKey = (e: React.KeyboardEvent) => {
+  useWindowKeys((e) => {
     const map: Record<string, Parameters<typeof act>[0]> = {
       ArrowLeft: "left",
       ArrowRight: "right",
@@ -308,7 +309,7 @@ function Blocks() {
       if (status === "playing") setStatus("paused");
       else if (status === "paused") setStatus("playing");
     }
-  };
+  });
 
   const message =
     status === "ready"
@@ -355,7 +356,6 @@ function Blocks() {
                 autoFocus
                 className="arcade-canvas"
                 aria-label="Blocks board"
-                onKeyDown={onKey}
                 onPointerDown={(e) => e.currentTarget.focus()}
               />
               {message && (

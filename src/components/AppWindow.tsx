@@ -2,6 +2,7 @@ import { TitleBar } from "@react95/core";
 import { useState } from "react";
 import { Win95Modal } from "./Win95Modal";
 import type { AppDef } from "../apps/registry";
+import { WindowIdContext } from "../hooks/useWindowKeys";
 import { useWindowsStore } from "../store/windows";
 
 interface AppWindowProps {
@@ -15,7 +16,9 @@ function AppWindow({ app, slot, zIndex }: AppWindowProps) {
   const closeWindow = useWindowsStore((s) => s.closeWindow);
   const [maximized, setMaximized] = useState(false);
   const Content = app.component;
-  const offset = 24 + slot * 28;
+  // Cascade like Windows does, wrapping back to the top so later apps in a
+  // long list don't open off the bottom of the screen.
+  const offset = 24 + (slot % 6) * 28;
   // Cascade from the top-left, but never push the window off a narrow screen.
   // Self-sizing windows (width 0) are assumed to be at most 320px wide.
   const fitWidth = app.width || 320;
@@ -59,7 +62,9 @@ function AppWindow({ app, slot, zIndex }: AppWindowProps) {
               }
         }
       >
-        <Content />
+        <WindowIdContext.Provider value={app.id}>
+          <Content />
+        </WindowIdContext.Provider>
       </Win95Modal.Content>
     </Win95Modal>
   );

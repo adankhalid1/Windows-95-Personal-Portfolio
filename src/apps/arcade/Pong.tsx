@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import MenuBar from "../../components/MenuBar";
+import { useWindowKeys } from "../../hooks/useWindowKeys";
 import { isTouch, useHighScore } from "./highScore";
 
 const W = 360;
@@ -181,6 +182,11 @@ function Pong() {
     canvas.current?.focus();
   };
 
+  useWindowKeys(
+    (e) => setKey(e, true),
+    (e) => setKey(e, false),
+  );
+
   const onPointer = (e: React.PointerEvent<HTMLCanvasElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
     const y = ((e.clientY - rect.top) / rect.height) * H;
@@ -188,7 +194,7 @@ function Pong() {
     if (status !== "playing") draw();
   };
 
-  const setKey = (e: React.KeyboardEvent, down: boolean) => {
+  const setKey = (e: KeyboardEvent, down: boolean) => {
     const k = e.key.length === 1 ? e.key.toLowerCase() : e.key;
     if (k === "ArrowUp" || k === "w") g.current.keys.up = down;
     else if (k === "ArrowDown" || k === "s") g.current.keys.down = down;
@@ -242,8 +248,6 @@ function Pong() {
               autoFocus
               className="arcade-canvas pong-canvas"
               aria-label="Pong court"
-              onKeyDown={(e) => setKey(e, true)}
-              onKeyUp={(e) => setKey(e, false)}
               onPointerMove={onPointer}
               onPointerDown={(e) => {
                 e.currentTarget.focus();
