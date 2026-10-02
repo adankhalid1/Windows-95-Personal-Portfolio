@@ -44,7 +44,7 @@ p {
 .screen {
   position: relative;
   height: 100%;
-  background: var(--desktop) url("./assets/wallpaper.jpg") center / cover no-repeat;
+  background: var(--desktop);
 }
 
 .dim {
@@ -169,8 +169,53 @@ p {
   width: min(470px, calc(100vw - 24px));
 }
 
-.shutdown-dialog {
+.shutdown-dialog,
+.run-dialog,
+.error-box {
   z-index: 2000 !important;
+}
+
+.error-box {
+  z-index: 2001 !important;
+}
+
+.run-dialog,
+.error-box {
+  left: 50% !important;
+  top: 40% !important;
+  transform: translate(-50%, -50%) !important;
+  width: min(400px, calc(100vw - 24px));
+}
+
+.run-body,
+.error-body {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.run-input {
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  align-items: center;
+}
+
+.button-row.end {
+  justify-content: flex-end;
+}
+
+.error-icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #f00;
+  color: #fff;
+  font-weight: 700;
+  box-shadow: 1px 1px 0 #000;
 }
 
 .login-body {
@@ -238,17 +283,13 @@ p {
 .desktop {
   position: absolute;
   inset: 0 0 28px;
-  padding: 8px;
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  align-content: flex-start;
-  gap: 4px;
+  overflow: hidden;
+  touch-action: none;
 }
 
 .desktop-icon {
-  width: 84px;
-  padding: 4px;
+  position: absolute;
+  padding: 4px 2px;
   border: 0;
   background: none;
   display: flex;
@@ -259,20 +300,50 @@ p {
   font: inherit;
   font-size: 12px;
   cursor: default;
+  touch-action: none;
+}
+
+.desktop-icon.dragging {
+  opacity: 0.7;
+  z-index: 1;
 }
 
 .desktop-icon svg,
 .desktop-icon img {
   width: 32px;
   height: 32px;
+  pointer-events: none;
+}
+
+.icons-small .desktop-icon svg,
+.icons-small .desktop-icon img {
+  width: 16px;
+  height: 16px;
+}
+
+.icons-small .desktop-icon {
+  font-size: 11px;
+}
+
+.icons-large .desktop-icon svg,
+.icons-large .desktop-icon img {
+  width: 48px;
+  height: 48px;
+  image-rendering: pixelated;
+}
+
+.icons-large .desktop-icon {
+  font-size: 13px;
 }
 
 .desktop-icon span {
+  max-width: 100%;
   padding: 1px 3px;
   text-shadow: 1px 1px 1px #000;
   border: 1px dotted transparent;
   text-align: center;
   line-height: 1.2;
+  overflow-wrap: anywhere;
 }
 
 .desktop-icon:focus {
@@ -288,6 +359,164 @@ p {
   text-shadow: none;
   background: var(--navy);
   border-color: #ffff80;
+}
+
+/* ---------- Context menu ---------- */
+
+.context-menu {
+  position: fixed;
+  z-index: 3000;
+  min-width: 160px;
+  margin: 0;
+  padding: 3px;
+  list-style: none;
+  background: var(--face);
+  box-shadow: var(--bevel-out);
+}
+
+.context-menu button {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 3px 16px 3px 4px;
+  border: 0;
+  background: none;
+  font: inherit;
+  text-align: left;
+  color: #000;
+}
+
+.context-menu button.bold {
+  font-weight: 700;
+}
+
+.context-menu button:not(:disabled):hover,
+.context-menu button:not(:disabled):focus-visible {
+  background: var(--navy);
+  color: #fff;
+  outline: none;
+}
+
+.context-menu button:disabled {
+  color: var(--shadow);
+  text-shadow: 1px 1px #fff;
+}
+
+.context-check {
+  width: 18px;
+  flex: none;
+}
+
+.context-divider {
+  margin: 3px 2px;
+  border-top: 1px solid var(--shadow);
+  border-bottom: 1px solid #fff;
+}
+
+/* ---------- Tray: clock, calendar, balloon ---------- */
+
+.tray-clock {
+  cursor: pointer;
+}
+
+.calendar {
+  position: fixed;
+  right: 4px;
+  bottom: 32px;
+  z-index: 1002;
+  width: 220px;
+  padding: 6px;
+  background: var(--face);
+  box-shadow: var(--bevel-out);
+}
+
+.calendar-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.calendar-head button {
+  min-width: 0;
+  padding: 0 6px;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  padding: 4px;
+  background: #fff;
+  box-shadow: var(--bevel-in);
+  text-align: center;
+  font-size: 12px;
+}
+
+.calendar-grid span {
+  padding: 2px 0;
+}
+
+.calendar-weekday {
+  font-weight: 700;
+  border-bottom: 1px solid var(--shadow);
+}
+
+.calendar-today {
+  background: var(--navy);
+  color: #fff;
+}
+
+.calendar-time {
+  margin-top: 6px;
+  padding: 2px;
+  text-align: center;
+  box-shadow: var(--bevel-in);
+}
+
+.balloon {
+  position: fixed;
+  right: 8px;
+  bottom: 40px;
+  z-index: 1002;
+  width: min(280px, calc(100vw - 16px));
+  padding: 8px 24px 8px 10px;
+  background: #ffffe1;
+  border: 1px solid #000;
+  border-radius: 6px;
+  font-size: 13px;
+  animation: balloon-in 0.25s ease-out;
+}
+
+.balloon::after {
+  content: "";
+  position: absolute;
+  right: 24px;
+  bottom: -10px;
+  border: 10px solid transparent;
+  border-top-color: #ffffe1;
+  border-bottom: 0;
+  filter: drop-shadow(0 1px 0 #000);
+}
+
+.balloon p {
+  margin: 4px 0 0;
+}
+
+.balloon-close {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  border: 0;
+  background: none;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+@keyframes balloon-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
 }
 
 /* ---------- Start menu ---------- */
@@ -324,6 +553,105 @@ p {
 .app-window-content {
   overflow: auto;
   background: var(--face);
+}
+
+.app-window-content.resizable {
+  resize: both;
+  min-width: 200px;
+  min-height: 120px;
+}
+
+.app-window.maximized {
+  left: 0 !important;
+  top: 0 !important;
+  right: 0;
+  bottom: 28px;
+  transform: none !important;
+}
+
+.app-window.maximized .app-window-content {
+  flex: 1;
+  width: auto !important;
+  height: auto !important;
+  resize: none;
+}
+
+/* ---------- Display Properties / Close Program ---------- */
+
+.display-props {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.display-props fieldset {
+  align-self: stretch;
+}
+
+.monitor {
+  width: 180px;
+  padding: 10px 10px 18px;
+  background: var(--face);
+  box-shadow: var(--bevel-out);
+  border-radius: 4px 4px 0 0;
+}
+
+.monitor-screen {
+  height: 100px;
+  box-shadow: var(--bevel-in);
+}
+
+.pick-list {
+  margin: 0;
+  padding: 2px;
+  list-style: none;
+  max-height: 120px;
+  overflow: auto;
+  background: #fff;
+  box-shadow: var(--bevel-in);
+}
+
+.pick-list.tall {
+  height: 140px;
+  max-height: none;
+}
+
+.pick-list button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 1px 4px;
+  border: 0;
+  background: none;
+  font: inherit;
+  text-align: left;
+  color: #000;
+}
+
+.pick-list button[aria-selected="true"] {
+  background: var(--navy);
+  color: #fff;
+}
+
+.swatch {
+  width: 14px;
+  height: 10px;
+  border: 1px solid #000;
+}
+
+.custom-color {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.close-program {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .notepad {

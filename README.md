@@ -16,8 +16,27 @@ icon opens a draggable window.
 | Minesweeper | 9x9, 10 mines. Right-click (or long-press) to flag |
 | Recycle Bin | Old stuff. You can empty it |
 
-The Start menu has every program, a "Find me on..." submenu, and Shut Down
-(shut down, restart, or log off all work).
+The Start menu has every program, a "Find me on..." submenu, Settings,
+Run..., and Shut Down (shut down, restart, or log off all work).
+
+### Desktop tricks
+
+- **Drag icons** anywhere (mouse or touch). Positions are remembered.
+- **Right-click** (or long-press on a phone) the desktop for Arrange Icons,
+  icon size, and Properties; right-click an icon to open or delete it.
+- **Deleted icons** go to the Recycle Bin. Double-click one there to restore it.
+- **Display Properties** (desktop right-click > Properties, or Start > Settings)
+  changes the wallpaper (image, preset color, or any custom color) and icon size.
+- **Run...** opens programs by their classic names: `winmine`, `notepad`,
+  `wordpad`, `explorer`, `taskmgr`, `control`, or any website address.
+  Anything else gets the classic "Cannot find the file" error.
+- **Ctrl+Alt+Del** (or Ctrl+Shift+Esc) opens Close Program to end or switch tasks.
+- **Click the clock** for a calendar; hover it for the full date.
+- **Maximize** windows from the title bar button or by double-clicking the
+  title bar, and resize them from the bottom-right corner.
+
+Desktop settings live in the visitor's browser (localStorage), so each visitor
+gets their own arrangement.
 
 ## Making it yours
 
@@ -52,6 +71,11 @@ npm run lint
 
 - Based on [alishirani1384/win95-portfolio](https://github.com/alishirani1384/win95-portfolio).
   The first commit in this repo is that project as-is; everything after it is my rework.
+- Draggable icons, right-click menus, the Recycle Bin restore, wallpaper and
+  icon-size settings, the Run dialog, the clock calendar, and the welcome
+  notification were inspired by
+  [Yuteoctober/wins95Portfolio](https://github.com/Yuteoctober/wins95Portfolio)
+  (MIT). They were written from scratch here, not copied.
 - More classic icons, if you want something React95 doesn't ship:
   [trapd00r/win95-winxp_icons](https://github.com/trapd00r/win95-winxp_icons) and
   [artage.io's Windows 95 icon pack](https://artage.io/en/icon-packs/original-windows-95-icons).
