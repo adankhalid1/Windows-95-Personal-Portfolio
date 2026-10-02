@@ -27,7 +27,7 @@ interface DesktopState {
 
 const DEFAULTS = {
   positions: {},
-  iconSize: "medium" as IconSize,
+  iconSize: "large" as IconSize,
   wallpaper: { kind: "image", id: "bliss" } as Wallpaper,
   recycled: [],
 };
