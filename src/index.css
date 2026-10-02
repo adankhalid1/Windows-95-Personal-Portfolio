@@ -171,6 +171,7 @@ p {
 
 .shutdown-dialog,
 .run-dialog,
+.leave-dialog,
 .error-box {
   z-index: 2000 !important;
 }
@@ -180,11 +181,27 @@ p {
 }
 
 .run-dialog,
+.leave-dialog,
 .error-box {
   left: 50% !important;
   top: 40% !important;
   transform: translate(-50%, -50%) !important;
   width: min(400px, calc(100vw - 24px));
+}
+
+.leave-body {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  margin-bottom: 4px;
+}
+
+.leave-url {
+  padding: 3px 6px;
+  background: #fff;
+  box-shadow: var(--bevel-in);
+  font-family: "Courier New", monospace;
+  overflow-wrap: anywhere;
 }
 
 .run-body,

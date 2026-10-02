@@ -21,6 +21,7 @@ const socialLinks = profile.links
 function Taskbar() {
   const openApp = useOpenApp();
   const openDialog = useUi((s) => s.openDialog);
+  const openLink = useUi((s) => s.openLink);
   const [showCalendar, setShowCalendar] = useState(false);
   const taskbarRef = useRef<HTMLDivElement>(null);
 
@@ -66,7 +67,7 @@ function Taskbar() {
                 <List.Item
                   key={link.url}
                   icon={isSocial(link.kind) ? <SocialIcon kind={link.kind} /> : undefined}
-                  onClick={() => window.open(link.url, "_blank", "noopener")}
+                  onClick={() => openLink(link)}
                 >
                   {link.label}
                 </List.Item>
@@ -91,7 +92,7 @@ function Taskbar() {
                   {profile.links.map((link) => (
                     <List.Item
                       key={link.url}
-                      onClick={() => window.open(link.url, "_blank", "noopener")}
+                      onClick={() => openLink(link)}
                     >
                       {link.label}
                     </List.Item>

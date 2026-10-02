@@ -10,6 +10,7 @@ import {
   FaTiktok,
 } from "react-icons/fa";
 import { profile, type Link } from "../data/profile";
+import { useUi } from "../store/ui";
 
 const LINK_ICONS: Record<Link["kind"], typeof FaGithub> = {
   github: FaGithub,
@@ -25,6 +26,7 @@ const emailLink = profile.links.find((l) => l.kind === "email");
 const emailAddress = emailLink?.url.replace(/^mailto:/, "") ?? "";
 
 function Contact() {
+  const openLink = useUi((s) => s.openLink);
   const [subject, setSubject] = useState("");
   const [body, setBody] = useState("");
 
@@ -65,7 +67,16 @@ function Contact() {
         {profile.links.map((link) => {
           const Icon = LINK_ICONS[link.kind];
           return (
-            <a key={link.url} href={link.url} target="_blank" rel="noreferrer">
+            <a
+              key={link.url}
+              href={link.url}
+              target="_blank"
+              rel="noreferrer"
+              onClick={(e) => {
+                e.preventDefault();
+                openLink(link);
+              }}
+            >
               <Icon size={16} /> {link.label}
             </a>
           );

@@ -5,6 +5,7 @@ import AppWindow from "./components/AppWindow";
 import BootScreen from "./components/BootScreen";
 import ContextMenu from "./components/ContextMenu";
 import Desktop from "./components/Desktop";
+import LeaveDialog from "./components/LeaveDialog";
 import Login from "./components/Login";
 import RunDialog from "./components/RunDialog";
 import ShutdownDialog from "./components/ShutdownDialog";
@@ -76,6 +77,7 @@ function App() {
           <Taskbar />
           <WelcomeBalloon />
           <ContextMenu />
+          <LeaveDialog />
           {dialog === "run" && <RunDialog />}
           {dialog === "shutdown" && <ShutdownDialog close={() => openDialog(null)} />}
         </>
