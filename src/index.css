@@ -560,6 +560,12 @@ p {
   box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.15);
 }
 
+/* react95 gives every svg in a menu item a right margin (meant for the item's
+   own icon); undo it for the logo inside the tile so it stays centered. */
+.social-icon > svg {
+  margin: 0 !important;
+}
+
 .social-instagram {
   background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fd5949 45%, #d6249f 60%, #285aeb 90%);
 }
