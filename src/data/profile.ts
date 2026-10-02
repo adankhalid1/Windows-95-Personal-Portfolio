@@ -46,9 +46,9 @@ export const profile = {
 
   /** Instagram, TikTok, LinkedIn and GitHub also get their own Start menu entries. */
   links: [
-    { label: "Instagram", url: "https://www.instagram.com/your-handle", kind: "instagram" },
-    { label: "TikTok", url: "https://www.tiktok.com/@your-handle", kind: "tiktok" },
-    { label: "LinkedIn", url: "https://www.linkedin.com/in/your-handle", kind: "linkedin" },
+    { label: "Instagram", url: "https://www.instagram.com/adan.kld/", kind: "instagram" },
+    { label: "TikTok", url: "https://www.tiktok.com/@adan.kld", kind: "tiktok" },
+    { label: "LinkedIn", url: "https://www.linkedin.com/in/adankhalid/", kind: "linkedin" },
     { label: "GitHub", url: "https://github.com/adankhalid1", kind: "github" },
     { label: "Email", url: "mailto:you@example.com", kind: "email" },
   ] satisfies Link[],
