@@ -15,6 +15,10 @@ export function useOpenApp() {
       } else {
         openWindow(id);
       }
+      // When this is triggered from a dialog (Run, Close Program...), the
+      // dialog closing makes react95's taskbar refocus whichever window it
+      // registered last, after ours. Focus again once that has settled.
+      setTimeout(() => focus(id), 0);
     },
     [openWindow, restore, focus],
   );

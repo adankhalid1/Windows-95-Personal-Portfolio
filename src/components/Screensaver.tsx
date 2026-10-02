@@ -107,6 +107,20 @@ const MAKERS: Record<Exclude<ScreensaverKind, "none">, () => Draw> = {
   mystify,
 };
 
+/**
+ * The saver disappears on pointerdown, so the click that follows would land
+ * on whatever was underneath (a tap could change a setting or open an app).
+ * Waking up should be all that tap does.
+ */
+function swallowNextClick() {
+  const swallow = (e: Event) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+  window.addEventListener("click", swallow, { capture: true, once: true });
+  setTimeout(() => window.removeEventListener("click", swallow, { capture: true }), 600);
+}
+
 function Saver({ kind, onWake }: { kind: Exclude<ScreensaverKind, "none">; onWake: () => void }) {
   const canvas = useRef<HTMLCanvasElement>(null);
 
@@ -138,6 +152,7 @@ function Saver({ kind, onWake }: { kind: Exclude<ScreensaverKind, "none">; onWak
         origin ??= { x: e.clientX, y: e.clientY };
         if (Math.hypot(e.clientX - origin.x, e.clientY - origin.y) < 8) return; // ignore jitter
       }
+      if (e.type === "pointerdown" || e.type === "touchstart") swallowNextClick();
       onWake();
     };
     ACTIVITY.forEach((t) => window.addEventListener(t, wake, true));
