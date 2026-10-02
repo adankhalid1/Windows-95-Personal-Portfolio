@@ -1,11 +1,21 @@
 import { Button, Input, TextArea } from "@react95/core";
 import { useState } from "react";
-import { FaEnvelope, FaGithub, FaGlobe, FaLink, FaLinkedin } from "react-icons/fa";
+import {
+  FaEnvelope,
+  FaGithub,
+  FaGlobe,
+  FaInstagram,
+  FaLink,
+  FaLinkedin,
+  FaTiktok,
+} from "react-icons/fa";
 import { profile, type Link } from "../data/profile";
 
 const LINK_ICONS: Record<Link["kind"], typeof FaGithub> = {
   github: FaGithub,
   linkedin: FaLinkedin,
+  instagram: FaInstagram,
+  tiktok: FaTiktok,
   email: FaEnvelope,
   website: FaGlobe,
   other: FaLink,

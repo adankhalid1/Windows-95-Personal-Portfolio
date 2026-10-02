@@ -4,7 +4,7 @@
 export interface Link {
   label: string;
   url: string;
-  kind: "github" | "linkedin" | "email" | "website" | "other";
+  kind: "github" | "linkedin" | "instagram" | "tiktok" | "email" | "website" | "other";
 }
 
 export interface Job {
@@ -44,9 +44,12 @@ export const profile = {
     "Double-click around: my projects, resume, and contact details are all on this desktop. There's also Minesweeper, for research purposes.",
   ],
 
+  /** Instagram, TikTok, LinkedIn and GitHub also get their own Start menu entries. */
   links: [
-    { label: "GitHub", url: "https://github.com/adankhalid1", kind: "github" },
+    { label: "Instagram", url: "https://www.instagram.com/your-handle", kind: "instagram" },
+    { label: "TikTok", url: "https://www.tiktok.com/@your-handle", kind: "tiktok" },
     { label: "LinkedIn", url: "https://www.linkedin.com/in/your-handle", kind: "linkedin" },
+    { label: "GitHub", url: "https://github.com/adankhalid1", kind: "github" },
     { label: "Email", url: "mailto:you@example.com", kind: "email" },
   ] satisfies Link[],
 

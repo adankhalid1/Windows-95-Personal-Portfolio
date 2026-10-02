@@ -6,8 +6,17 @@ import { profile } from "../data/profile";
 import { useOpenApp } from "../hooks/useOpenApp";
 import { useUi } from "../store/ui";
 import Calendar from "./Calendar";
+import SocialIcon from "./SocialIcon";
+import { isSocial, SOCIAL_KINDS, type SocialKind } from "../data/social";
 
 const FAVORITES = ["about", "projects", "resume", "contact"];
+
+const socialLinks = profile.links
+  .filter((link) => isSocial(link.kind))
+  .sort(
+    (a, b) =>
+      SOCIAL_KINDS.indexOf(a.kind as SocialKind) - SOCIAL_KINDS.indexOf(b.kind as SocialKind),
+  );
 
 function Taskbar() {
   const openApp = useOpenApp();
@@ -53,6 +62,16 @@ function Taskbar() {
               <span>95</span>
             </div>
             <List width="210px">
+              {socialLinks.map((link) => (
+                <List.Item
+                  key={link.url}
+                  icon={isSocial(link.kind) ? <SocialIcon kind={link.kind} /> : undefined}
+                  onClick={() => window.open(link.url, "_blank", "noopener")}
+                >
+                  {link.label}
+                </List.Item>
+              ))}
+              {socialLinks.length > 0 && <List.Divider />}
               <List.Item icon={<Folder variant="32x32_4" />}>
                 <List width="200px">
                   {APPS.filter((app) => !app.startMenuOnly).map((app) => (

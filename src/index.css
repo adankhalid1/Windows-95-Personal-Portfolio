@@ -548,6 +548,38 @@ p {
   color: #fff;
 }
 
+.social-icon {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  margin-right: 10px;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 20px;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.15);
+}
+
+.social-instagram {
+  background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fd5949 45%, #d6249f 60%, #285aeb 90%);
+}
+
+.social-tiktok {
+  background: #000;
+  color: #fff;
+  filter: drop-shadow(1px 0 0 #25f4ee);
+}
+
+.social-linkedin {
+  background: #0a66c2;
+}
+
+.social-github {
+  background: #fff;
+  color: #000;
+  font-size: 24px;
+}
+
 /* ---------- Windows ---------- */
 
 .app-window-content {
