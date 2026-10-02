@@ -13,7 +13,7 @@ icon opens a draggable window.
 | Projects | Explorer-style folder. Double-click a project to see details and links |
 | Resume.doc | Experience, education, and skills in tabs |
 | Contact Me | A mail composer that opens your mail app, plus my links |
-| Minesweeper | 9x9, 10 mines. Right-click (or long-press) to flag |
+| Minesweeper | 9x9, 10 mines. Right-click to flag (🚩 flag mode on phones). Help > How to Play explains the rules |
 | Recycle Bin | Old stuff. You can empty it |
 
 The Start menu has every program, a "Find me on..." submenu, Settings,

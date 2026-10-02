@@ -76,12 +76,66 @@ const FACES: Record<Status, string> = {
   lost: "😵",
 };
 
+// Phones can't right-click (and iOS has no long-press menu), so touch
+// screens get a flag-mode toggle instead.
+const isTouch = window.matchMedia("(pointer: coarse)").matches;
+
+function HowToPlay({ onClose }: { onClose: () => void }) {
+  return (
+    <div className="mines-help">
+      <h3>How to Play</h3>
+      <p>
+        <b>Goal:</b> uncover every square that <i>isn't</i> a mine. There are {MINES} mines
+        hidden on the {ROWS}x{COLS} board.
+      </p>
+      <ul>
+        <li>
+          <b>Uncover a square:</b> {isTouch ? "tap it" : "left-click it"}. Your first click is
+          always safe.
+        </li>
+        <li>
+          <b>Numbers</b> tell you how many mines touch that square, including diagonals. A
+          blank square has none, so its neighbors open up automatically.
+        </li>
+        <li>
+          <b>Flag a mine:</b>{" "}
+          {isTouch
+            ? "turn on 🚩 flag mode below the board, then tap a square. Tap it again to remove the flag."
+            : "right-click a square you think hides a mine. Right-click again to remove it."}
+        </li>
+        <li>
+          <b>Counters:</b> the left one shows mines left to flag, the right one is your time
+          in seconds.
+        </li>
+        <li>
+          <b>Win</b> by uncovering every safe square (😎). Hit a mine and it&apos;s game over
+          (😵).
+        </li>
+        <li>
+          <b>New game:</b> click the smiley face, or Game &gt; New.
+        </li>
+      </ul>
+      <p className="muted">
+        Tip: if a 1 already touches a flagged mine, every other square around it is safe.
+      </p>
+      <div className="button-row center">
+        <button className="mines-ok" onClick={onClose}>
+          OK
+        </button>
+      </div>
+    </div>
+  );
+}
+
 const pad = (n: number) => String(Math.max(-99, Math.min(999, n))).padStart(3, "0");
 
 function Minesweeper() {
   const [board, setBoard] = useState(emptyBoard);
   const [status, setStatus] = useState<Status>("ready");
   const [seconds, setSeconds] = useState(0);
+  const [menu, setMenu] = useState<"game" | "help" | null>(null);
+  const [showHelp, setShowHelp] = useState(false);
+  const [flagMode, setFlagMode] = useState(false);
 
   useEffect(() => {
     if (status !== "playing") return;
@@ -119,8 +173,67 @@ function Minesweeper() {
 
   const flags = board.filter((cell) => cell.flagged).length;
 
+  const menuBar = (
+    <div className="mines-menubar" onMouseLeave={() => setMenu(null)}>
+      {(["game", "help"] as const).map((name) => (
+        <div key={name} className="mines-menu">
+          <button
+            className={menu === name ? "open" : undefined}
+            onClick={() => setMenu(menu === name ? null : name)}
+          >
+            {name === "game" ? (
+              <>
+                <u>G</u>ame
+              </>
+            ) : (
+              <>
+                <u>H</u>elp
+              </>
+            )}
+          </button>
+          {menu === name && (
+            <div className="mines-dropdown" role="menu">
+              {name === "game" ? (
+                <button
+                  role="menuitem"
+                  onClick={() => {
+                    reset();
+                    setShowHelp(false);
+                    setMenu(null);
+                  }}
+                >
+                  New
+                </button>
+              ) : (
+                <button
+                  role="menuitem"
+                  onClick={() => {
+                    setShowHelp(true);
+                    setMenu(null);
+                  }}
+                >
+                  How to Play
+                </button>
+              )}
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+
+  if (showHelp) {
+    return (
+      <div className="mines">
+        {menuBar}
+        <HowToPlay onClose={() => setShowHelp(false)} />
+      </div>
+    );
+  }
+
   return (
     <div className="mines">
+      {menuBar}
       <div className="mines-header">
         <span className="mines-counter">{pad(MINES - flags)}</span>
         <button className="mines-face" onClick={reset} aria-label="New game">
@@ -140,7 +253,7 @@ function Minesweeper() {
               cell.revealed && cell.mine ? " boom" : ""
             }`}
             data-n={cell.revealed && !cell.mine ? cell.adjacent : undefined}
-            onClick={() => open(i)}
+            onClick={() => (flagMode ? toggleFlag(i) : open(i))}
             onContextMenu={() => toggleFlag(i)}
           >
             {cell.flagged && !cell.revealed
@@ -153,6 +266,15 @@ function Minesweeper() {
           </button>
         ))}
       </div>
+      {isTouch && (
+        <button
+          className={`mines-flag-toggle${flagMode ? " on" : ""}`}
+          aria-pressed={flagMode}
+          onClick={() => setFlagMode((f) => !f)}
+        >
+          🚩 Flag mode: {flagMode ? "ON" : "OFF"}
+        </button>
+      )}
     </div>
   );
 }

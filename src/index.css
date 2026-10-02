@@ -881,6 +881,96 @@ p {
   box-shadow: var(--bevel-out);
 }
 
+.mines-menubar {
+  display: flex;
+  margin: -2px 0 6px;
+}
+
+.mines-menu {
+  position: relative;
+}
+
+.mines-menubar > .mines-menu > button,
+.mines-dropdown button {
+  padding: 1px 6px;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: #000;
+}
+
+.mines-menubar > .mines-menu > button.open,
+.mines-dropdown button:hover,
+.mines-dropdown button:focus-visible {
+  background: var(--navy);
+  color: #fff;
+  outline: none;
+}
+
+.mines-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 5;
+  min-width: 120px;
+  padding: 2px;
+  background: var(--face);
+  box-shadow: var(--bevel-out);
+}
+
+.mines-dropdown button {
+  display: block;
+  width: 100%;
+  padding: 3px 16px 3px 8px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.mines-help {
+  /* same width as the board, so the window doesn't jump in size */
+  width: 186px;
+  padding: 6px;
+  background: #fff;
+  box-shadow: var(--bevel-in);
+  font-size: 12px;
+  user-select: text;
+}
+
+.mines-help h3 {
+  margin: 0 0 6px;
+}
+
+.mines-help ul {
+  margin: 6px 0;
+  padding-left: 14px;
+}
+
+.mines-help li {
+  margin-bottom: 4px;
+}
+
+.mines-ok,
+.mines-flag-toggle {
+  min-width: 76px;
+  padding: 3px 8px;
+  border: 0;
+  background: var(--face);
+  box-shadow: var(--bevel-out);
+  font: inherit;
+  color: #000;
+}
+
+.mines-ok:active,
+.mines-flag-toggle.on {
+  box-shadow: var(--bevel-in);
+}
+
+.mines-flag-toggle {
+  display: block;
+  width: 100%;
+  margin-top: 6px;
+}
+
 .mines-header {
   display: flex;
   justify-content: space-between;
