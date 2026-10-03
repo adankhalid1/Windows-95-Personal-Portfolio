@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import MenuBar from "../../components/MenuBar";
+import { unlock } from "../../store/secrets";
 import BouncingCards from "./BouncingCards";
 import { fitCardWidth, isRed, newDeck, shuffle, type Card } from "./cards";
 import PlayingCard from "./PlayingCard";
@@ -157,6 +158,7 @@ function Solitaire() {
     setState(next);
     setSelected(null);
     setStarted(true);
+    if (isWon(next)) unlock("solitaire");
     if (isWon(next) && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       setCelebrating(true);
     }

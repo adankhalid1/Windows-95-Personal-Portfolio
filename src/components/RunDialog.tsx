@@ -27,6 +27,11 @@ function RunDialog() {
       openApp(appId);
       return close();
     }
+    if (lower === "clippy" || lower === "clippy.exe") {
+      close();
+      useUi.getState().setClippyNow(true);
+      return;
+    }
     if (lower === "scrnsave" || lower === "screensaver" || lower === "scrnsave.exe") {
       close();
       useUi.getState().setScreensaverNow(true);

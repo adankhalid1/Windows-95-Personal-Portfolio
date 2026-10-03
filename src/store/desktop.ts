@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { createJSONStorage, persist, type StateStorage } from "zustand/middleware";
 
 export type IconSize = "small" | "medium" | "large";
-export type ScreensaverKind = "none" | "flying" | "starfield" | "mystify";
+export type ScreensaverKind = "none" | "flying" | "starfield" | "mystify" | "matrix";
 export type Wallpaper = { kind: "image"; id: string } | { kind: "color"; value: string };
 
 interface Point {
@@ -41,7 +41,7 @@ const DEFAULTS = {
 
 // localStorage can throw (private windows, blocked storage); fall back to
 // an in-memory desktop instead of crashing.
-const safeStorage: StateStorage = {
+export const safeStorage: StateStorage = {
   getItem: (key) => {
     try {
       return localStorage.getItem(key);

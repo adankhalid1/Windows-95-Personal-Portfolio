@@ -1,12 +1,14 @@
 import { Button, Fieldset, RadioButton, Tab, Tabs } from "@react95/core";
 import { WALLPAPER_COLORS, WALLPAPER_IMAGES, wallpaperCss } from "../data/wallpapers";
 import { useDesktop, type IconSize, type ScreensaverKind } from "../store/desktop";
+import { useSecrets } from "../store/secrets";
 import { useUi } from "../store/ui";
 
 const SAVERS: { value: ScreensaverKind; label: string }[] = [
   { value: "flying", label: "Flying Windows" },
   { value: "starfield", label: "Starfield" },
   { value: "mystify", label: "Mystify" },
+  { value: "matrix", label: "The Matrix" },
   { value: "none", label: "(None)" },
 ];
 
@@ -20,6 +22,9 @@ function DisplayProperties() {
   const { wallpaper, setWallpaper, iconSize, setIconSize, resetDesktop } = useDesktop();
   const { screensaver, screensaverWait, setScreensaver } = useDesktop();
   const setScreensaverNow = useUi((s) => s.setScreensaverNow);
+  const found = useSecrets((s) => s.found);
+  // Secret screensavers and wallpapers only show up once they've been found.
+  const savers = SAVERS.filter((o) => o.value !== "matrix" || found.includes("matrix") || screensaver === "matrix");
   const isColor = (value: string) =>
     wallpaper.kind === "color" && wallpaper.value.toLowerCase() === value.toLowerCase();
   const customColor = wallpaper.kind === "color" ? wallpaper.value : "#008080";
@@ -33,7 +38,9 @@ function DisplayProperties() {
           </div>
           <Fieldset legend="Wallpaper">
             <ul className="pick-list" role="listbox">
-              {Object.entries(WALLPAPER_IMAGES).map(([id, image]) => (
+              {Object.entries(WALLPAPER_IMAGES)
+                .filter(([id, image]) => !image.secret || found.includes(image.secret) || (wallpaper.kind === "image" && wallpaper.id === id))
+                .map(([id, image]) => (
                 <li key={id}>
                   <button
                     role="option"
@@ -74,7 +81,7 @@ function DisplayProperties() {
             <div className={`monitor-screen saver-${screensaver}`} />
           </div>
           <Fieldset legend="Screen saver">
-            {SAVERS.map((option) => (
+            {savers.map((option) => (
               <RadioButton
                 key={option.value}
                 name="screensaver"

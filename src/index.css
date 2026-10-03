@@ -1168,6 +1168,7 @@ p {
   background: var(--face);
   box-shadow: var(--bevel-out);
   font: 700 13px/20px Arial, sans-serif;
+  position: relative;
   cursor: default;
 }
 
@@ -2484,6 +2485,7 @@ p {
 .monitor-screen.saver-flying,
 .monitor-screen.saver-starfield,
 .monitor-screen.saver-mystify,
+.monitor-screen.saver-matrix,
 .monitor-screen.saver-none {
   background: #000;
 }
@@ -2505,9 +2507,315 @@ p {
     #000;
 }
 
+.monitor-screen.saver-matrix {
+  background:
+    repeating-linear-gradient(90deg, transparent 0 5px, #000 5px 9px),
+    linear-gradient(#000, #22ff44 40%, #000 41%, #000 60%, #22ff44 85%, #000 86%);
+}
+
 .monitor-screen.saver-mystify {
   background:
     linear-gradient(135deg, transparent 45%, #ff40ff 46% 48%, transparent 49%),
     linear-gradient(45deg, transparent 45%, #40ffff 46% 48%, transparent 49%),
     #000;
+}
+
+/* ---------- Easter eggs ---------- */
+
+.error-icon.info {
+  background: #000080;
+  font: italic 700 20px "Times New Roman", serif;
+}
+
+/* Blue Screen of Death */
+.bsod {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: #0000aa;
+  color: #fff;
+  font: 16px/1.4 "Fixedsys", "Lucida Console", "Courier New", monospace;
+  cursor: none;
+}
+
+.bsod-body {
+  max-width: 640px;
+}
+
+.bsod-body p {
+  margin: 0 0 18px;
+}
+
+.bsod-title {
+  text-align: center;
+}
+
+.bsod-title span {
+  padding: 0 6px;
+  background: #aaa;
+  color: #0000aa;
+}
+
+.bsod-continue {
+  text-align: center;
+}
+
+.bsod-cursor {
+  animation: blink 1s steps(1) infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* Minesweeper cheat: one dark pixel in the corner of each mine, like XYZZY */
+.mines-cell.cheat-mine::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 2px;
+  height: 2px;
+  background: #000;
+}
+
+/* Paperclip assistant */
+.assistant {
+  position: fixed;
+  right: 12px;
+  bottom: 36px;
+  z-index: 1002;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  animation: balloon-in 0.25s ease-out;
+}
+
+.assistant-bubble {
+  position: relative;
+  width: min(270px, calc(100vw - 24px));
+  padding: 10px 10px 8px;
+  background: #ffffe1;
+  border: 1px solid #000;
+  border-radius: 8px;
+  font-size: 13px;
+  box-shadow: 2px 2px 0 rgb(0 0 0 / 0.35);
+}
+
+.assistant-bubble::after {
+  content: "";
+  position: absolute;
+  right: 34px;
+  bottom: -10px;
+  border: 10px solid transparent;
+  border-top-color: #ffffe1;
+  border-bottom: 0;
+  filter: drop-shadow(0 1px 0 #000);
+}
+
+.assistant-options {
+  margin: 6px 0 4px;
+  padding: 0;
+  list-style: none;
+}
+
+.assistant-options button,
+.assistant-off {
+  padding: 2px 0;
+  border: 0;
+  background: none;
+  color: #000080;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.assistant-options button::before {
+  content: "● ";
+  color: #000080;
+}
+
+.assistant-options button:hover,
+.assistant-off:hover {
+  text-decoration: underline;
+}
+
+.assistant-actions {
+  display: flex;
+  gap: 6px;
+  margin: 6px 0 4px;
+}
+
+.assistant-actions .win-btn {
+  min-width: 72px;
+  padding: 3px 8px;
+}
+
+.assistant-off {
+  display: block;
+  margin-top: 4px;
+  color: #555;
+  font-size: 11px;
+}
+
+.assistant-clip {
+  margin-right: 14px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  filter: drop-shadow(2px 2px 0 rgb(0 0 0 / 0.3));
+  animation: assistant-bob 2.4s ease-in-out infinite;
+}
+
+.assistant-eyes {
+  transform-origin: 30px 34px;
+  animation: assistant-blink 5s infinite;
+}
+
+@keyframes assistant-bob {
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+@keyframes assistant-blink {
+  0%,
+  94%,
+  100% {
+    transform: scaleY(1);
+  }
+  97% {
+    transform: scaleY(0.1);
+  }
+}
+
+/* Achievement unlocked pop-up */
+.achievement-toast {
+  position: fixed;
+  top: 12px;
+  left: 50%;
+  z-index: 1003;
+  width: min(280px, calc(100vw - 24px));
+  padding: 3px;
+  border: 0;
+  background: var(--face);
+  box-shadow: var(--bevel-out), 2px 2px 0 rgb(0 0 0 / 0.4);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transform: translateX(-50%);
+  animation: toast-in 0.3s ease-out;
+}
+
+.achievement-toast-title {
+  display: block;
+  padding: 2px 4px;
+  background: linear-gradient(90deg, #000080, #1084d0);
+  color: #fff;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.achievement-toast-body {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 8px 6px 6px;
+  font-size: 13px;
+}
+
+.achievement-trophy {
+  font-size: 26px;
+}
+
+@keyframes toast-in {
+  from {
+    transform: translate(-50%, -120%);
+  }
+}
+
+/* Achievements.txt */
+.achievements-page {
+  overflow: auto;
+  background: #fff;
+  user-select: text;
+}
+
+.achievements-page p {
+  margin: 0;
+}
+
+.achievements-bar {
+  display: flex;
+  gap: 2px;
+  width: max-content;
+  margin: 6px 0 4px;
+  padding: 2px;
+  box-shadow: var(--bevel-in);
+}
+
+.achievements-bar span {
+  width: 12px;
+  height: 14px;
+}
+
+.achievements-bar span.on {
+  background: #000080;
+}
+
+.achievements-done {
+  margin: 6px 0 !important;
+  color: #008000;
+  font-weight: 700;
+}
+
+.achievements-list {
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.achievements-list li {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+  color: #666;
+}
+
+.achievements-list li.found {
+  color: #000;
+}
+
+.achievements-check {
+  flex: none;
+}
+
+/* My Computer: link to Achievements.txt */
+.my-computer-file {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  padding: 2px;
+  border: 0;
+  background: none;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .assistant,
+  .assistant-clip,
+  .assistant-eyes,
+  .achievement-toast,
+  .bsod-cursor {
+    animation: none;
+  }
 }
