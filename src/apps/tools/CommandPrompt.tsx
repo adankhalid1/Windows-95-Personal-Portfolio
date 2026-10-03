@@ -2,6 +2,8 @@ import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { profile, type Project } from "../../data/profile";
 import { useOpenApp } from "../../hooks/useOpenApp";
 import { WindowIdContext } from "../../hooks/useWindowKeys";
+import { unlock } from "../../store/secrets";
+import { useUi } from "../../store/ui";
 import { useWindowsStore } from "../../store/windows";
 import { resolveApp } from "../aliases";
 import { appsInFolder } from "../registry";
@@ -87,7 +89,21 @@ const HELP = `Commands:
   START <app>    Open a program (START SOLITAIRE, START CALC...)
   <name>.EXE     Run a program in the current folder
   ABOUT, RESUME, PROJECTS, LINKS   Shortcuts to my info
-  WHOAMI, VER, DATE, TIME, ECHO <text>, COLOR <0a>, CLS, EXIT`;
+  WHOAMI, VER, DATE, TIME, ECHO <text>, COLOR <0a>, CLS, EXIT
+  ACHIEVEMENTS   See which secrets you've found
+
+...and a few commands that aren't on this list.`;
+
+const COFFEE = [
+  "        ( (",
+  "         ) )",
+  "      ........",
+  "      |      |]",
+  "      \\      /",
+  "       `----'",
+  "",
+  "Here's your coffee. Fuel for the next commit.",
+];
 
 const COLORS: Record<string, string> = {
   "0": "#000000", "1": "#000080", "2": "#008000", "3": "#008080", "4": "#800000", "5": "#800080",
@@ -197,6 +213,7 @@ function CommandPrompt() {
         if (!node) return ["File not found"];
         if (node.kind === "dir") return ["Access denied (that's a folder, try DIR)"];
         if (node.kind === "exe") return ["This program cannot be displayed. Try running it instead."];
+        if (node === nodeAt(["WINDOWS", "SECRET.TXT"])) unlock("secret");
         return node.content.split("\n");
       }
       case "tree": {
@@ -241,6 +258,67 @@ function CommandPrompt() {
         setColors({ bg: COLORS[code[0]], fg: COLORS[code[1]] });
         return [];
       }
+      // ---- Easter eggs
+      case "format":
+      case "deltree":
+        // FORMAT C: (or anything like it) crashes the whole computer.
+        unlock("bsod");
+        useUi.getState().setBsod(true);
+        return [];
+      case "del":
+      case "erase": {
+        if (/\*\.\*|^[a-z]:\\?$|^\\$/i.test(arg)) {
+          unlock("bsod");
+          useUi.getState().setBsod(true);
+          return [];
+        }
+        return arg ? ["Access denied. These files belong to the portfolio."] : ["Required parameter missing"];
+      }
+      case "rm":
+        if (/-\w*r\w*f|-\w*f\w*r/i.test(arg)) {
+          unlock("rmrf");
+          return ["Nice try. This isn't Linux, and nothing here is getting deleted. :)"];
+        }
+        return ["'rm' is a Linux thing. Here we say DEL (but please don't)."];
+      case "sudo":
+        unlock("sudo");
+        return [`${profile.handle} is not in the sudoers file. This incident will be reported.`];
+      case "matrix":
+        unlock("matrix");
+        useUi.getState().setScreensaverNow("matrix");
+        return ["Wake up, Neo...", "(Move the mouse or press a key to leave the Matrix.)"];
+      case "coffee":
+      case "java":
+        unlock("coffee");
+        return COFFEE;
+      case "ping": {
+        const who = arg.toLowerCase().replace(/^@/, "");
+        const me = [profile.name.split(" ")[0].toLowerCase(), profile.handle.toLowerCase(), profile.name.toLowerCase()];
+        if (!who) return ["Usage: PING <name>. Try PING ADAN."];
+        if (!me.some((m) => who.includes(m))) return [`Pinging ${arg}...`, "Request timed out.", "Request timed out.", "(Try PING ADAN.)"];
+        unlock("ping");
+        return [
+          `Pinging ${profile.name} [127.0.0.1] with 32 bytes of data:`,
+          "Reply from adan: bytes=32 time=1ms TTL=128 (probably drinking coffee)",
+          "Reply from adan: bytes=32 time=1ms TTL=128 (open to new opportunities)",
+          "Reply from adan: bytes=32 time=1ms TTL=128 (type CONTACT to say hi)",
+          "",
+          "Ping statistics: Sent = 3, Received = 3, Lost = 0 (0% loss). Adan is online!",
+        ];
+      }
+      case "hello":
+      case "hi":
+      case "hey":
+        unlock("hello");
+        return [`Hello! Thanks for stopping by ${profile.name.split(" ")[0]}'s PC. Type HELP to see what you can do.`];
+      case "xyzzy":
+        return ["Nothing happens.", "(Wrong cheat code. Try a more famous one, on the desktop.)"];
+      case "clippy":
+        useUi.getState().setClippyNow(true);
+        return ["It looks like you're trying to summon a paperclip."];
+      case "achievements":
+        openApp("achievements");
+        return [];
       case "exit":
         if (windowId) closeWindow(windowId);
         return [];

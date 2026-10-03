@@ -101,10 +101,34 @@ function mystify(): Draw {
   };
 }
 
+/** Green code raining down the screen. Unlocked by MATRIX in the Command Prompt. */
+function matrix(): Draw {
+  const CELL = 16;
+  const GLYPHS = "ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄ0123456789ABCDEF<>/*+=";
+  let drops: number[] = [];
+  let tick = 0;
+  return (ctx, w, h) => {
+    const cols = Math.ceil(w / CELL);
+    if (drops.length !== cols) drops = Array.from({ length: cols }, () => Math.floor(Math.random() * -40));
+    // Draw every other frame: the classic effect is a little choppy.
+    if (tick++ % 2) return;
+    ctx.fillStyle = "rgba(0, 0, 0, 0.12)";
+    ctx.fillRect(0, 0, w, h);
+    ctx.font = `${CELL}px monospace`;
+    drops.forEach((row, i) => {
+      const ch = GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
+      ctx.fillStyle = Math.random() < 0.08 ? "#d8ffd8" : "#22ff44";
+      ctx.fillText(ch, i * CELL, row * CELL);
+      drops[i] = row * CELL > h && Math.random() > 0.96 ? 0 : row + 1;
+    });
+  };
+}
+
 const MAKERS: Record<Exclude<ScreensaverKind, "none">, () => Draw> = {
   flying: flyingWindows,
   starfield,
   mystify,
+  matrix,
 };
 
 /**
@@ -188,14 +212,16 @@ function Screensaver() {
     };
   }, [kind, wait, idle]);
 
-  const showing = (idle || now) && kind !== "none";
+  // A specific kind asked for right now (the Matrix) beats the chosen one.
+  const showKind = typeof now === "string" ? now : kind;
+  const showing = (idle || now !== false) && showKind !== "none";
   const onWake = useCallback(() => {
     setIdle(false);
     setNow(false);
   }, [setNow]);
 
   if (!showing) return null;
-  return <Saver kind={kind as Exclude<ScreensaverKind, "none">} onWake={onWake} />;
+  return <Saver kind={showKind as Exclude<ScreensaverKind, "none">} onWake={onWake} />;
 }
 
 export default Screensaver;

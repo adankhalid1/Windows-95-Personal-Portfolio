@@ -1,9 +1,13 @@
 import { ModalEvents, useModal } from "@react95/core";
 import { useEffect } from "react";
 import { APPS } from "./apps/registry";
+import AchievementToast from "./components/AchievementToast";
 import AppWindow from "./components/AppWindow";
+import Assistant from "./components/Assistant";
 import BootScreen from "./components/BootScreen";
+import Bsod from "./components/Bsod";
 import ContextMenu from "./components/ContextMenu";
+import ErrorBox from "./components/ErrorBox";
 import Desktop from "./components/Desktop";
 import LeaveDialog from "./components/LeaveDialog";
 import Login from "./components/Login";
@@ -13,6 +17,7 @@ import ShutdownDialog from "./components/ShutdownDialog";
 import ShutdownScreen from "./components/ShutdownScreen";
 import Taskbar from "./components/Taskbar";
 import WelcomeBalloon from "./components/WelcomeBalloon";
+import { useKonami } from "./hooks/useKonami";
 import { useOpenApp } from "./hooks/useOpenApp";
 import { wallpaperCss } from "./data/wallpapers";
 import { useDesktop } from "./store/desktop";
@@ -29,6 +34,10 @@ function App() {
   const dialog = useUi((s) => s.dialog);
   const openDialog = useUi((s) => s.openDialog);
   const openApp = useOpenApp();
+  const bsod = useUi((s) => s.bsod);
+  const notice = useUi((s) => s.notice);
+  const showNotice = useUi((s) => s.showNotice);
+  useKonami(phase === "desktop" && !bsod);
 
   // react95 only raises the focused window and leaves the rest in DOM order,
   // so keep our own back-to-front stack and hand each window its z-index.
@@ -55,6 +64,7 @@ function App() {
     return () => window.removeEventListener("keydown", onKey);
   }, [phase, openApp]);
 
+  if (bsod) return <Bsod />;
   if (phase === "boot") return <BootScreen />;
   if (phase === "shutdown") return <ShutdownScreen />;
 
@@ -79,6 +89,9 @@ function App() {
           <WelcomeBalloon />
           <ContextMenu />
           <LeaveDialog />
+          <Assistant />
+          <AchievementToast />
+          {notice && <ErrorBox info title={notice.title} message={notice.message} onClose={() => showNotice(null)} />}
           <Screensaver />
           {dialog === "run" && <RunDialog />}
           {dialog === "shutdown" && <ShutdownDialog close={() => openDialog(null)} />}

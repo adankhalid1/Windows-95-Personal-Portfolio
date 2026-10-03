@@ -22,6 +22,7 @@ import {
   Wordpad,
 } from "@react95/icons";
 import AboutMe from "./AboutMe";
+import Achievements from "./Achievements";
 import Chess from "./chess/Chess";
 import FreeCell from "./cards/FreeCell";
 import Hearts from "./cards/Hearts";
@@ -82,6 +83,8 @@ export interface AppDef {
   onDesktop?: boolean;
   /** Fixed-size windows can't be resized or maximized. */
   fixedSize?: boolean;
+  /** Not on the desktop or in the Start menu: found some other way. */
+  hidden?: boolean;
 }
 
 export const APPS: AppDef[] = [
@@ -367,6 +370,17 @@ export const APPS: AppDef[] = [
     fixedSize: true,
   },
   {
+    id: "achievements",
+    title: "Achievements.txt - Notepad",
+    label: "Achievements.txt",
+    icon: <Notepad variant="32x32_4" />,
+    smallIcon: <Notepad variant="16x16_4" />,
+    width: 460,
+    height: 400,
+    component: Achievements,
+    hidden: true,
+  },
+  {
     id: "taskmgr",
     title: "Close Program",
     label: "Close Program",
@@ -382,6 +396,6 @@ export const APPS: AppDef[] = [
 export const getApp = (id: string) => APPS.find((app) => app.id === id);
 
 export const isOnDesktop = (app: AppDef) =>
-  app.onDesktop ?? (!app.folder && !app.startMenuOnly);
+  app.onDesktop ?? (!app.folder && !app.startMenuOnly && !app.hidden);
 
 export const appsInFolder = (folder: FolderId) => APPS.filter((app) => app.folder === folder);

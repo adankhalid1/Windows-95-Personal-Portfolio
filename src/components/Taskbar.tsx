@@ -87,7 +87,7 @@ function StartMenu() {
                 {label}
               </List.Item>
             ))}
-            {APPS.filter((app) => !app.startMenuOnly && !app.folder && !FOLDER_IDS.has(app.id)).map(
+            {APPS.filter((app) => !app.startMenuOnly && !app.hidden && !app.folder && !FOLDER_IDS.has(app.id)).map(
               (app) => (
                 <List.Item
                   key={app.id}

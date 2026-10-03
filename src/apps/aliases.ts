@@ -30,6 +30,7 @@ export const ALIASES: Record<string, string> = {
   "command.com": "command",
   "ms-dos": "command",
   winamp: "music",
+  "achievements.txt": "achievements",
   mplayer: "music",
 };
 

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import MenuBar from "../components/MenuBar";
+import { unlock, useSecrets } from "../store/secrets";
 
 const ROWS = 9;
 const COLS = 9;
@@ -136,6 +137,8 @@ function Minesweeper() {
   const [seconds, setSeconds] = useState(0);
   const [showHelp, setShowHelp] = useState(false);
   const [flagMode, setFlagMode] = useState(false);
+  // Konami code: a tiny dot on each mine, like the old XYZZY cheat.
+  const cheat = useSecrets((s) => s.cheat);
 
   useEffect(() => {
     if (status !== "playing") return;
@@ -164,6 +167,7 @@ function Minesweeper() {
     setBoard(next);
     const cleared = next.every((cell) => cell.mine || cell.revealed);
     setStatus(cleared ? "won" : "playing");
+    if (cleared) unlock("minesweeper");
   };
 
   const toggleFlag = (index: number) => {
@@ -222,7 +226,7 @@ function Minesweeper() {
             key={i}
             className={`mines-cell${cell.revealed ? " revealed" : ""}${
               cell.revealed && cell.mine ? " boom" : ""
-            }`}
+            }${cheat && cell.mine && !cell.revealed ? " cheat-mine" : ""}`}
             data-n={cell.revealed && !cell.mine ? cell.adjacent : undefined}
             onClick={() => (flagMode ? toggleFlag(i) : open(i))}
             onContextMenu={() => toggleFlag(i)}
