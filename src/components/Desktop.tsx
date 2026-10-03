@@ -4,6 +4,7 @@ import { APPS, isOnDesktop, type AppDef } from "../apps/registry";
 import { useLongPress } from "../hooks/useLongPress";
 import { useOpenApp } from "../hooks/useOpenApp";
 import { useDesktop, type IconSize } from "../store/desktop";
+import { restoreDefaults } from "../store/restoreDefaults";
 import { useUi, type MenuEntry } from "../store/ui";
 
 // On touch screens a double-tap is awkward, so a single tap opens.
@@ -152,6 +153,7 @@ function Desktop() {
     { label: "Medium Icons", checked: iconSize === "medium", onClick: () => setIconSize("medium") },
     { label: "Small Icons", checked: iconSize === "small", onClick: () => setIconSize("small") },
     "divider",
+    { label: "Restore Default Desktop", onClick: restoreDefaults },
     { label: "Properties", onClick: () => openApp("display") },
   ];
 

@@ -1,6 +1,7 @@
 import { Button, Fieldset, RadioButton, Tab, Tabs } from "@react95/core";
 import { WALLPAPER_COLORS, WALLPAPER_IMAGES, wallpaperCss } from "../data/wallpapers";
 import { useDesktop, type IconSize, type ScreensaverKind } from "../store/desktop";
+import { restoreDefaults } from "../store/restoreDefaults";
 import { useSecrets } from "../store/secrets";
 import { useUi } from "../store/ui";
 
@@ -19,7 +20,7 @@ const SIZES: { value: IconSize; label: string }[] = [
 ];
 
 function DisplayProperties() {
-  const { wallpaper, setWallpaper, iconSize, setIconSize, resetDesktop } = useDesktop();
+  const { wallpaper, setWallpaper, iconSize, setIconSize } = useDesktop();
   const { screensaver, screensaverWait, setScreensaver } = useDesktop();
   const setScreensaverNow = useUi((s) => s.setScreensaverNow);
   const found = useSecrets((s) => s.found);
@@ -127,8 +128,11 @@ function DisplayProperties() {
           ))}
         </Fieldset>
         <Fieldset legend="Reset">
-          <p>Put every icon back, restore deleted ones, and bring back the default wallpaper.</p>
-          <Button onClick={resetDesktop}>Restore defaults</Button>
+          <p>
+            Put the desktop back how it first looked: deleted icons restored, icons back in their circle,
+            default wallpaper and screensaver, and every window closed.
+          </p>
+          <Button onClick={restoreDefaults}>Restore defaults</Button>
         </Fieldset>
       </Tab>
     </Tabs>

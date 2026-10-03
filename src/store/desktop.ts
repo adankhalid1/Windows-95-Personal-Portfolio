@@ -26,6 +26,7 @@ interface DesktopState {
   setWallpaper: (wallpaper: Wallpaper) => void;
   recycle: (id: string) => void;
   restore: (id: string) => void;
+  restoreAll: () => void;
   resetDesktop: () => void;
   setScreensaver: (kind: ScreensaverKind, wait?: number) => void;
 }
@@ -76,6 +77,7 @@ export const useDesktop = create<DesktopState>()(
       recycle: (id) =>
         set((s) => (s.recycled.includes(id) ? s : { recycled: [...s.recycled, id] })),
       restore: (id) => set((s) => ({ recycled: s.recycled.filter((r) => r !== id) })),
+      restoreAll: () => set({ recycled: [] }),
       resetDesktop: () => set(DEFAULTS),
       setScreensaver: (screensaver, wait) =>
         set((s) => ({ screensaver, screensaverWait: wait ?? s.screensaverWait })),
