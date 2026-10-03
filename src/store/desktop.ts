@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { createJSONStorage, persist, type StateStorage } from "zustand/middleware";
 
 export type IconSize = "small" | "medium" | "large";
+export type ScreensaverKind = "none" | "flying" | "starfield" | "mystify";
 export type Wallpaper = { kind: "image"; id: string } | { kind: "color"; value: string };
 
 interface Point {
@@ -16,6 +17,9 @@ interface DesktopState {
   wallpaper: Wallpaper;
   /** Desktop icons sitting in the Recycle Bin, most recent last. */
   recycled: string[];
+  screensaver: ScreensaverKind;
+  /** Minutes of no activity before the screensaver starts. */
+  screensaverWait: number;
   moveIcon: (id: string, to: Point) => void;
   arrangeIcons: () => void;
   setIconSize: (size: IconSize) => void;
@@ -23,6 +27,7 @@ interface DesktopState {
   recycle: (id: string) => void;
   restore: (id: string) => void;
   resetDesktop: () => void;
+  setScreensaver: (kind: ScreensaverKind, wait?: number) => void;
 }
 
 const DEFAULTS = {
@@ -30,6 +35,8 @@ const DEFAULTS = {
   iconSize: "large" as IconSize,
   wallpaper: { kind: "image", id: "bliss" } as Wallpaper,
   recycled: [],
+  screensaver: "flying" as ScreensaverKind,
+  screensaverWait: 1,
 };
 
 // localStorage can throw (private windows, blocked storage); fall back to
@@ -70,15 +77,19 @@ export const useDesktop = create<DesktopState>()(
         set((s) => (s.recycled.includes(id) ? s : { recycled: [...s.recycled, id] })),
       restore: (id) => set((s) => ({ recycled: s.recycled.filter((r) => r !== id) })),
       resetDesktop: () => set(DEFAULTS),
+      setScreensaver: (screensaver, wait) =>
+        set((s) => ({ screensaver, screensaverWait: wait ?? s.screensaverWait })),
     }),
     {
       name: "win95-desktop",
       storage: createJSONStorage(() => safeStorage),
-      partialize: ({ positions, iconSize, wallpaper, recycled }) => ({
+      partialize: ({ positions, iconSize, wallpaper, recycled, screensaver, screensaverWait }) => ({
         positions,
         iconSize,
         wallpaper,
         recycled,
+        screensaver,
+        screensaverWait,
       }),
     },
   ),

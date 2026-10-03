@@ -1,40 +1,13 @@
 import { Button, Input, TitleBar } from "@react95/core";
 import { Rundll1 } from "@react95/icons";
 import { useState } from "react";
-import { APPS } from "../apps/registry";
+import { ALIASES, resolveApp } from "../apps/aliases";
 import { useOpenApp } from "../hooks/useOpenApp";
 import { useSession } from "../store/session";
 import { useUi } from "../store/ui";
 import { useWindowsStore } from "../store/windows";
 import ErrorBox from "./ErrorBox";
 import { Win95Modal } from "./Win95Modal";
-
-// Classic program names, mapped to the apps on this desktop.
-const ALIASES: Record<string, string> = {
-  notepad: "about",
-  "about me": "about",
-  explorer: "projects",
-  wordpad: "resume",
-  write: "resume",
-  winmine: "minesweeper",
-  mail: "contact",
-  email: "contact",
-  "my computer": "my-computer",
-  sysdm: "my-computer",
-  "sysdm.cpl": "my-computer",
-  control: "display",
-  "desk.cpl": "display",
-  taskmgr: "taskmgr",
-  recycled: "recycle-bin",
-};
-
-function resolveApp(command: string): string | undefined {
-  const name = command.replace(/\.exe$/, "");
-  if (ALIASES[name]) return ALIASES[name];
-  return APPS.find(
-    (app) => app.id === name || app.label.toLowerCase().replace(/\.\w+$/, "") === name,
-  )?.id;
-}
 
 const looksLikeUrl = (s: string) => /^(https?:\/\/|www\.)\S+$|^[\w-]+\.(com|org|net|io|dev|app)(\/\S*)?$/.test(s);
 
@@ -53,6 +26,11 @@ function RunDialog() {
     if (appId) {
       openApp(appId);
       return close();
+    }
+    if (lower === "scrnsave" || lower === "screensaver" || lower === "scrnsave.exe") {
+      close();
+      useUi.getState().setScreensaverNow(true);
+      return;
     }
     if (lower === "shutdown" || lower === "logoff") {
       useWindowsStore.getState().closeAll();
@@ -99,7 +77,7 @@ function RunDialog() {
                 onChange={(e) => setCommand(e.currentTarget.value)}
               />
               <datalist id="run-suggestions">
-                {[...Object.keys(ALIASES), "shutdown"].map((name) => (
+                {[...Object.keys(ALIASES), "scrnsave", "shutdown"].map((name) => (
                   <option key={name} value={name} />
                 ))}
               </datalist>

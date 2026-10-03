@@ -2,9 +2,15 @@ import { Button, Fieldset } from "@react95/core";
 import { FolderExe } from "@react95/icons";
 import { useState } from "react";
 import { profile, type Project } from "../data/profile";
+import { useUi } from "../store/ui";
 import { FileExe } from "./icons";
 
+// On touch screens a double-tap is awkward, so a single tap opens.
+const singleClickOpens = window.matchMedia("(pointer: coarse)").matches;
+
 function ProjectDetails({ project, onBack }: { project: Project; onBack: () => void }) {
+  // Links leave the site, so they get the same heads-up as the social links.
+  const openLink = useUi((s) => s.openLink);
   return (
     <div className="project-details">
       <div className="explorer-toolbar">
@@ -31,12 +37,16 @@ function ProjectDetails({ project, onBack }: { project: Project; onBack: () => v
       </Fieldset>
       <div className="button-row">
         {project.repo && (
-          <Button onClick={() => window.open(project.repo, "_blank", "noopener")}>
+          <Button
+            onClick={() => openLink({ label: `${project.name} source code`, url: project.repo!, kind: "github" })}
+          >
             View source
           </Button>
         )}
         {project.demo && (
-          <Button onClick={() => window.open(project.demo, "_blank", "noopener")}>
+          <Button
+            onClick={() => openLink({ label: `${project.name} demo`, url: project.demo!, kind: "website" })}
+          >
             Live demo
           </Button>
         )}
@@ -70,7 +80,7 @@ function Projects() {
             role="button"
             tabIndex={0}
             className={`explorer-row${selected === project.name ? " selected" : ""}`}
-            onClick={() => setSelected(project.name)}
+            onClick={() => (singleClickOpens ? setOpened(project) : setSelected(project.name))}
             onDoubleClick={() => setOpened(project)}
             onKeyDown={(e) => e.key === "Enter" && setOpened(project)}
           >
@@ -84,7 +94,7 @@ function Projects() {
         ))}
       </div>
       <div className="statusbar">
-        {profile.projects.length} object(s) &middot; double-click to open
+        {profile.projects.length} object(s) &middot; {singleClickOpens ? "tap" : "double-click"} to open
       </div>
     </div>
   );

@@ -1,6 +1,14 @@
 import { Button, Fieldset, RadioButton, Tab, Tabs } from "@react95/core";
 import { WALLPAPER_COLORS, WALLPAPER_IMAGES, wallpaperCss } from "../data/wallpapers";
-import { useDesktop, type IconSize } from "../store/desktop";
+import { useDesktop, type IconSize, type ScreensaverKind } from "../store/desktop";
+import { useUi } from "../store/ui";
+
+const SAVERS: { value: ScreensaverKind; label: string }[] = [
+  { value: "flying", label: "Flying Windows" },
+  { value: "starfield", label: "Starfield" },
+  { value: "mystify", label: "Mystify" },
+  { value: "none", label: "(None)" },
+];
 
 const SIZES: { value: IconSize; label: string }[] = [
   { value: "small", label: "Small" },
@@ -10,6 +18,8 @@ const SIZES: { value: IconSize; label: string }[] = [
 
 function DisplayProperties() {
   const { wallpaper, setWallpaper, iconSize, setIconSize, resetDesktop } = useDesktop();
+  const { screensaver, screensaverWait, setScreensaver } = useDesktop();
+  const setScreensaverNow = useUi((s) => s.setScreensaverNow);
   const isColor = (value: string) =>
     wallpaper.kind === "color" && wallpaper.value.toLowerCase() === value.toLowerCase();
   const customColor = wallpaper.kind === "color" ? wallpaper.value : "#008080";
@@ -55,6 +65,44 @@ function DisplayProperties() {
                 onChange={(e) => setWallpaper({ kind: "color", value: e.currentTarget.value })}
               />
             </label>
+          </Fieldset>
+        </div>
+      </Tab>
+      <Tab title="Screen Saver">
+        <div className="display-props">
+          <div className="monitor" aria-hidden>
+            <div className={`monitor-screen saver-${screensaver}`} />
+          </div>
+          <Fieldset legend="Screen saver">
+            {SAVERS.map((option) => (
+              <RadioButton
+                key={option.value}
+                name="screensaver"
+                checked={screensaver === option.value}
+                onChange={() => setScreensaver(option.value)}
+              >
+                {option.label}
+              </RadioButton>
+            ))}
+            <label className="custom-color">
+              Wait:
+              <select
+                value={screensaverWait}
+                onChange={(e) => setScreensaver(screensaver, Number(e.currentTarget.value))}
+                disabled={screensaver === "none"}
+              >
+                {[1, 2, 5, 10].map((m) => (
+                  <option key={m} value={m}>
+                    {m} minute{m > 1 ? "s" : ""}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <div className="button-row">
+              <Button disabled={screensaver === "none"} onClick={() => setScreensaverNow(true)}>
+                Preview
+              </Button>
+            </div>
           </Fieldset>
         </div>
       </Tab>
