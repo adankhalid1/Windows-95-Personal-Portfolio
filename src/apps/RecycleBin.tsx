@@ -17,6 +17,7 @@ function RecycleBin() {
   const [selected, setSelected] = useState<string | null>(null);
   const recycled = useDesktop((s) => s.recycled);
   const restore = useDesktop((s) => s.restore);
+  const restoreAll = useDesktop((s) => s.restoreAll);
   const showContextMenu = useUi((s) => s.showContextMenu);
   const count = junk.length + recycled.length;
 
@@ -27,6 +28,9 @@ function RecycleBin() {
       <div className="explorer-toolbar">
         <Button disabled={!selected} onClick={() => selected && restore(selected)}>
           Restore
+        </Button>
+        <Button disabled={recycled.length === 0} onClick={restoreAll}>
+          Restore All
         </Button>
         <Button disabled={junk.length === 0} onClick={() => setJunk([])}>
           Empty Recycle Bin
