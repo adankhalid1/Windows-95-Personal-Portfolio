@@ -2864,3 +2864,33 @@ p {
 .compose-sent button {
   margin-top: 6px;
 }
+
+/* About Me photo, framed like a picture pasted into the document */
+.about-photo {
+  float: right;
+  width: 150px;
+  margin: 0 0 8px 12px;
+  padding: 3px;
+  background: var(--face);
+  box-shadow: var(--bevel-out);
+}
+
+.about-photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  box-shadow: var(--bevel-in);
+}
+
+.about-photo figcaption {
+  padding-top: 2px;
+  font: 11px "MS Sans Serif", Tahoma, sans-serif;
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .about-photo {
+    width: 110px;
+    margin-left: 8px;
+  }
+}

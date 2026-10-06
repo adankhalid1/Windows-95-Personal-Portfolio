@@ -103,8 +103,8 @@ export const APPS: AppDef[] = [
     label: "About Me.txt",
     icon: <Notepad variant="32x32_4" />,
     smallIcon: <Notepad variant="16x16_4" />,
-    width: 460,
-    height: 300,
+    width: 560,
+    height: 420,
     component: AboutMe,
   },
   {
