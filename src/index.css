@@ -2819,3 +2819,48 @@ p {
     animation: none;
   }
 }
+
+/* Contact form (Formspree) */
+.compose-error {
+  color: #c00000;
+  font-size: 12px;
+}
+
+.compose-footer {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.compose-progress {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  font-size: 12px;
+}
+
+.compose-progress-bar {
+  width: 90px;
+  height: 14px;
+  box-shadow: var(--bevel-in);
+  background: repeating-linear-gradient(90deg, #000080 0 8px, transparent 8px 10px) 0 0 / 0 100% no-repeat;
+  animation: compose-progress 1.6s steps(9) infinite;
+}
+
+@keyframes compose-progress {
+  to {
+    background-size: 100% 100%;
+  }
+}
+
+.compose-sent {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 8px 4px;
+}
+
+.compose-sent button {
+  margin-top: 6px;
+}
